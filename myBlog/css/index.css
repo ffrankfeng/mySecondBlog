@@ -1,0 +1,29 @@
+body{
+	min-width:1024px;
+  	max-width:100%;
+}
+.navbar-right{
+	width:20%;
+	height:100%;
+	margin-top: 12px;
+	position: relative;
+	float:right;
+	min-width:210px;
+}
+.form-ground{
+	position:absolute;
+	float:right;
+}
+.form-search{
+	border:1px solid #8C8C8C;
+	border-radius: 10px;
+}
+.btn{
+	border:1px solid #8C8C8C;
+	background:#C7DDEF;
+	height:30px;
+	text-align:center;
+}
+.btn:hover{
+	background:#9ACFEA;
+}
