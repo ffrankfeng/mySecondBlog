@@ -13,5 +13,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="D:/javaProgram/Java源代码/fengfblog/WebContent/WEB-INF/lib/spring-context-4.1.3.RELEASE.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

@@ -149,6 +149,9 @@ function submitform(){
 								 	<div class="col-lg-6 col-xs-6" style="margin-top: 2%;">
 								 		<span style="font-size:18px;color: red">${loginInfo}</span>
 								 	</div>
+								 	<div class="col-lg-8 col-xs-8" style="margin-top: 2%;float: right;">
+								 		<a href="register" style="font-size: small;color: green;">去注册...</a> 
+								 	</div>
 							 	</div>
 							 	<div class="row" style="margin-top: 2%;margin-bottom: 4%;">
 								 	<div class="col-lg-4 col-xs-4"></div>

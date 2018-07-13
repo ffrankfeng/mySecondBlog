@@ -31,4 +31,6 @@ public interface UsersMapper {
 	Users selectByusername(String userName);
 
 	void addUserArticleCount(Integer userId);
+
+	List<Users> selectHotUsers(int i);
 }

@@ -1,6 +1,6 @@
 package com.fengf.blog.mapper;
 
-import com.fengf.blog.pojo.Articles;
+import com.fengf.blog.pojo.MoodQueryVo;
 import com.fengf.blog.pojo.MoodShareQueryVo;
 import com.fengf.blog.pojo.Moodshare;
 import com.fengf.blog.pojo.MoodshareExample;
@@ -18,19 +18,25 @@ public interface MoodshareMapper {
 
     int insertSelective(Moodshare record);
 
+    List<Moodshare> selectByExampleWithBLOBs(MoodshareExample example);
+
     List<Moodshare> selectByExample(MoodshareExample example);
 
     Moodshare selectByPrimaryKey(Integer moodId);
 
     int updateByExampleSelective(@Param("record") Moodshare record, @Param("example") MoodshareExample example);
 
+    int updateByExampleWithBLOBs(@Param("record") Moodshare record, @Param("example") MoodshareExample example);
+
     int updateByExample(@Param("record") Moodshare record, @Param("example") MoodshareExample example);
 
     int updateByPrimaryKeySelective(Moodshare record);
 
+    int updateByPrimaryKeyWithBLOBs(Moodshare record);
+
     int updateByPrimaryKey(Moodshare record);
-
-	int moodCountByQueryVo(MoodShareQueryVo vo);
-
-	List<Moodshare> selectMoodListByQueryVo(MoodShareQueryVo vo);
+    
+    int moodCountByQueryVo(MoodShareQueryVo vo);
+	  
+	List<MoodShareQueryVo> selectMoodListByQueryVo(MoodShareQueryVo vo);
 }

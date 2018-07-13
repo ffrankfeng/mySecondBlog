@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +42,8 @@ public class ArticleController {
 	//首页
 	@RequestMapping(value="/index")
 	public String index(ArticleQueryVo vo,Model model){
-		
+		List<Users> hotUsers=articleService.selectHotUsers();
+		model.addAttribute("hotUsers", hotUsers);
 		Page<Articles>  page = articleService.selectAllPage(vo);
 		model.addAttribute("page", page);
 		return "index";

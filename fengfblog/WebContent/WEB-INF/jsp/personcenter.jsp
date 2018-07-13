@@ -78,7 +78,7 @@
 										</tr>
 										</table>
 						</div>
-						<div class="col-lg-12 col-xs-12"style="margin-top: 2%;margin-bottom: 2%;margin-left: 4%;">
+						<div class="col-lg-12 col-xs-12"style="margin-top: 2%;margin-bottom: 2%;">
 							<span style="font-size: small; color: #808080;">${current_user.introduction }</span>
 						</div>
 											

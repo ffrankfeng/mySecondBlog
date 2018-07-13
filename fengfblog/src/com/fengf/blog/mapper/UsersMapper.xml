@@ -80,6 +80,9 @@
     user_id, user_name, user_password, email, phone, birthday, sex, profession, gold, 
     joinday, attention, fans, moodcount, articlecount, introduction
   </sql>
+  <select id="selectHotUsers" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT * FROM users ORDER BY fans DESC LIMIT #{i}
+	</select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.fengf.blog.pojo.UsersExample" >
     select
     <if test="distinct" >

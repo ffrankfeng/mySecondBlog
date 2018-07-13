@@ -3,6 +3,7 @@ package com.fengf.blog.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,6 +95,10 @@ public class ArticleServiceIpml implements ArticleService {
 	public Users getArticleAuthor(String author) {
 		Users users = usersMapper.selectByusername(author);
 		return users;
+	}
+	@Override
+	public List<Users> selectHotUsers() {
+		return usersMapper.selectHotUsers(5);
 	}
 
 }

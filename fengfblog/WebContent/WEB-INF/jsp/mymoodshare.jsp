@@ -28,6 +28,65 @@
 <script src="<%=basePath%>js/jquery-1.11.3.min.js"></script>
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
+<script type="text/javascript">
+/* function submitmymood(){
+	var moodContent =$("#moodContent").val();
+	var moodPic =$("#moodPic").val();
+	alert(moodPic);
+	$.post(
+			"${pageContext.request.contextPath}/writeMyMood",
+			{"moodContent":moodContent,"moodPic":moodPic},
+			function(data){
+				var isCorrect=data.isCorrect;
+				if(isCorrect){
+					alert("发布成功！");
+			 	}
+				else{
+					alert("发布失败，请重新发布！");
+				}
+				location.reload();
+			},
+			"json"
+			);
+				
+} */
+
+function checksubmint(){
+	var moodContent =$("#moodContent").val();
+	var flag=true;
+	if(moodContent==""){
+		flag=false;
+		alert("请输入文字");
+	}
+
+	return flag;
+}
+window.onload = function () {
+	//选择图片类型
+	var imgType = ["image/jpeg","image/png","image/x-png","image/bmp","image/gif"];
+	
+	//回显图片
+    var fr = new FileReader(),
+        file = document.getElementById("moodPic"),
+        img = document.createElement("img");
+	img.style="width:200px;height:240px";
+    file.onchange = function(e){
+    	for(var i = 0 ; i < imgType.length ; i++){
+        	if(file.files[0].type == imgType[i]){
+        		fr.onload = function(e){
+                    var res = this.result;
+                    img.src = res;
+
+                    document.getElementById("preImg").appendChild(img);//显示
+                };
+
+                fr.readAsDataURL(file.files[0]);//读取文件
+                break;
+        	}
+        }
+    }
+}
+</script>
 </head>
 <body style="background-image:url(<%=basePath%>img/background1.png);">
 	<!--导航栏-->
@@ -47,8 +106,8 @@
 							<img src="<%=basePath%>img/person.png" style="margin-top: 2%;margin-left: 2%;width: 60px;height: 60px;background-color: red;border-radius:50px ;"/>&nbsp;
 						
 						
-							<font size="2" style="font-weight: bold;">博主</font>
-							<span style="float: right;margin-top: 2px;margin-right: 4px;">修改</span>
+							<font size="2" style="font-weight: bold;">${current_user.userName }</font>
+							<a data-toggle="modal" data-target="#editDialog" onclick="edituser()"> <span style="float: right;margin-top: 2px;margin-right: 4px;">修改</span></a>
 							<img src="<%=basePath%>img/file_edit48.png" style="margin-top: 4px;float: right;width: 15px;height: 15px;"/>
 							
 						</div>
@@ -57,20 +116,20 @@
 							<table style="margin-top: 2%;font-weight: 560;">
 										<tr>
 											<td>性别:</td>
-											<td><span>男</span></td>
+											<td><span>${current_user.sex }</span></td>
 											
 										</tr>
 										<tr>
 											<td>生日：</td>	
-											<td><span>2018-6-30</span></td>		
+											<td><span>${current_user.birthday }</span></td>		
 										</tr>
 										<tr>
 											<td>行业：</td>
-											<td><span>IT</span></td>
+											<td><span>${current_user.profession }</span></td>
 										</tr>
 										<tr>
 											<td>金币：</td>
-											<td><span>0</span></td>
+											<td><span>${current_user.gold }</span></td>
 										</tr>
 										</table>
 						</div>
@@ -87,10 +146,10 @@
 											<td>文章</td>
 										</tr>
 										<tr>
-												<td><span>0</span></td>
-												<td><span>0</span></td>
-												<td><span>0</span></td>
-												<td><span>0</span></td>
+												<td><span>${current_user.attention }</span></td>
+												<td><span>${current_user.fans }</span></td>
+												<td><span>${current_user.moodcount }</span></td>
+												<td><span>${current_user.articlecount }</span></td>
 											</tr>
 										</table>
 										
@@ -131,68 +190,135 @@
 					</div>
 					<br />
 					<div class="row" style="background-color:white;height: 145px;">
-						<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;border-bottom: 1px solid #C5C5C5;">
-							<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;">
-								<textarea style="height: 100%;width: 100%;resize: none;">想说点什么。。。
-								</textarea>
-							</div>
-							<form name="form">
-							<div class="col-lg-6 col-xs-12" style="margin-bottom: 2%;float: right;">							
-								<!--<input type="file" class="btn btn-default" accept="image/*" style="display: inline-block;">-->
-								<input type="file" name="picpath" id="picpath" style="display:none;"accept="image/*" onChange="document.form.path.value=this.value">
-								<input name="path" class="btn btn-group-xs" readonly placeholder="请选择上传的图片"  style="font-size: 80%;">
-								<input type="button" class="btn btn-default" value="上传照片" onclick="document.form.picpath.click()"style="font-size: 80%;"> 
-								<input type="submit" class="btn btn-default" value="发布"style="font-size: 80%;"/>
-							</div>
-							</form>
+						<div class="" style="margin-bottom: 4%;border-bottom: 1px solid #C5C5C5;">
+							<form name="form" action="${pageContext.request.contextPath }/writeMyMood" method="post" enctype="multipart/form-data" onsubmit="return checksubmint()">
+								<div class="col-lg-10 col-xs-10" style="margin-bottom: 2%;">
+									<textarea style="height: 100%;width: 100%;resize: none; maxlength="100"  onchange="this.value=this.value.substring(0, 100)" onkeydown="this.value=this.value.substring(0, 100)" onkeyup="this.value=this.value.substring(0, 100)"  id="moodContent" name="moodContent" placeholder="想说点什么。。。"></textarea>
+								</div>
+								<div class="col-lg-2 col-xs-2" >
+									<input type="submit" class="btn btn-info" style="margin-left: 2%" value="发布" style="font-size: 80%;" />
+								</div>
+								
+									<div class="box" id="preImg" style="margin-left: 1%;"></div>
+									<input type="file" class="btn btn-info" accept="image/*" style="margin-left:3%;margin-bottom:4%; inline-block;" id="moodPic" name="moodPic">
+								
+								
+							</form> 
 						</div>
+						<!--<input type="file" class="btn btn-default" accept="image/*" style="display: inline-block;">-->
+<!-- 									<input type="file" name="picpath" id="picpath" style="display:none;"accept="image/*" onChange="document.form.path.value=this.value">
+									<input name="path" id="path" class="btn btn-group-xs" readonly placeholder="请选择上传的图片"  style="font-size: 80%;">
+									<input type="button" class="btn btn-default" value="上传照片" onclick="document.form.picpath.click()"style="font-size: 80%;">  -->
+						<c:forEach items="${page.rows }" var="mood"> 
 						<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;">
 							<div class="col-lg-1 hidden-xs" style="margin-right: 2%;" >
 								<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;float: left;border-radius:25px;background-color: red;"/>&nbsp;
 							</div>
 							<div class="col-lg-8 col-xs-12" style="border: 1px solid #C5C5C5;">
-								<font style="margin-top: 1%;font-size: small;">2018年7月1日 09:37</font>
+								<font style="margin-top: 1%;font-size: small;">${mood.moodDate }</font>
 								<div class="col-lg-12 col-xs-12" style="color: #808080;margin-top: 2%;">
-									<span>
-										在面试的后期，往往都会问性能优化的问题，譬如你优化过 JVM 吗，有没有遇到过 JVM 排查的场景，如果只能说点基本的见解，那面试官给你的定岗定薪很有可能是初级，…
-									</span><br />
-									<img src="<%=basePath%>img/content.png" class="col-xs-12" style="max-width: 600px;max-height: 600px;"/>
+									<span style="color: black;">
+										${mood.moodContent }
+										&nbsp;<br/>&nbsp;
+									</span>
+									<img src="${mood.moodPic }" class="col-xs-12" style="max-width: 600px;max-height: 600px;"/>
 								</div>
 								<div class="col-lg-12 col-xs-12" style="margin-top: 2%;border-bottom: 1px solid #C5C5C5;">
-									<div class="col-lg-5 col-xs-7"style="float: right;margin-bottom: 2%;">
-										<img src="<%=basePath%>img/like3.png" style="width: 20px;height: 20px;" onclick="#"/>&nbsp;
-										<span style="font-size: large;">123</span>&emsp;
-										<img src="<%=basePath%>img/dislike.png" style="width: 20px;height: 20px;" onclick="#"/>&nbsp;
-										<span style="font-size: large;">123</span>
+									 <div class="col-lg-3 col-xs-4"style="float: right;margin-bottom: 2%;">
+										<img src="<%=basePath%>img/like3.png" style="width: 20px;height: 20px;" onclick=""/>&nbsp;
+										<span style="font-size: large;">${mood.moodLike }</span>&emsp;
+
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;">
-							<div class="col-lg-1 hidden-xs" style="margin-right: 2%;" >
-								<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;float: left;border-radius:25px;background-color: red;"/>&nbsp;
-							</div>
-							<div class="col-lg-8 col-xs-12" style="border: 1px solid #C5C5C5;">
-								<font style="margin-top: 1%;font-size: small;">2018年7月1日 09:37</font>
-								<div class="col-lg-12 col-xs-12" style="color: #808080;margin-top: 2%;">
-									<span>
-										在面试的后期，往往都会问性能优化的问题，譬如你优化过 JVM 吗，有没有遇到过 JVM 排查的场景，如果只能说点基本的见解，那面试官给你的定岗定薪很有可能是初级，…
-									</span><br />
-									<img src="<%=basePath%>img/content.png" class="col-xs-12" style="max-width: 600px;max-height: 600px;"/>
-								</div>
-								<div class="col-lg-12 col-xs-12" style="margin-top: 2%;border-bottom: 1px solid #C5C5C5;">
-									<div class="col-lg-5 col-xs-7"style="float: right;margin-bottom: 2%;">
-										<img src="<%=basePath%>img/like3.png" style="width: 20px;height: 20px;" onclick="#"/>&nbsp;
-										<span style="font-size: large;">123</span>&emsp;
-										<img src="<%=basePath%>img/dislike.png" style="width: 20px;height: 20px;" onclick="#"/>&nbsp;
-										<span style="font-size: large;">123</span>
-									</div>
-								</div>
-							</div>
+						</c:forEach>
+
+						<div class="col-md-12 text-right">
+							<fengf:page url="${pageContext.request.contextPath }/mymoodshare" />
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+				<!-- 编辑对话框 -->
+		<div class="modal" id="editDialog" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">修改信息</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" id="edit_customer_form" action="personEdit" method="post">
+							<input type="hidden" id="edit_cust_id" name="cust_id"/>
+							<div class="form-group">
+								<label for="edit_userName" class="col-sm-2 control-label">用户名</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="edit_userName" value="${current_user.userName }" name="userName">
+								</div>
+							</div>	
+							
+							<div class="form-group">
+								<label for="edit_email" class="col-sm-2 control-label">email</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="edit_email" value="${current_user.email }" name="email">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit_phone" class="col-sm-2 control-label">联系方式</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="edit_phone" value="${current_user.phone }" name="phone">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit_birthday" class="col-sm-2 control-label">生日</label>
+								<div class="col-sm-10">
+									<input type="date" class="form-control" id="edit_birthday" value="${current_user.birthday }" name="birthday">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit_sex" class="col-sm-2 control-label">性别</label>
+								<div class="col-sm-10">
+									
+				                     <c:if test="${current_user.sex=='male'}">
+				                    	<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="male" checked="checked">男
+				                   		<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="female">女
+				                     </c:if>
+				                    <c:if test="${current_user.sex=='female'}">
+				                    	<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="male" >男
+				                   		<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="female" checked="checked">女
+				                     </c:if>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit_profession" class="col-sm-2 control-label">行业</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="edit_profession" value="${current_user.profession }" name="profession">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="edit_introduction" class="col-sm-2 control-label">个人简介</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="edit_introduction" value="${current_user.introduction }" name="introduction">
+								</div>
+							</div>
+							<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary" onclick="updateCustomer()">保存修改</button>
+					</div>
+						</form>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		document.getElementById('edit_birthday').valueAsDate=document.getElementById('birthday').value;
+</script>
 	</body>
 </html>

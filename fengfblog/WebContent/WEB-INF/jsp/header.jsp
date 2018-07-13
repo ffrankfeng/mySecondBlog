@@ -21,7 +21,15 @@
 					    </button>
 						<a class="navbar-brand" href="index">首页</a>
 						<a class="navbar-brand hidden-lg" href="#"><img src="<%=basePath%>img/search.png" style="width: 18px;height: 18px;" /></a>
-						<a class="navbar-brand hidden-lg" href="#"><img src="<%=basePath%>img/person.png" style="width: 18px;height: 18px;" /></a>
+						<c:if test="${current_user == null }">
+							<a class="navbar-brand hidden-lg" href="login">
+						</c:if>
+						<c:if test="${current_user != null }">
+							<a class="navbar-brand hidden-lg" href="personcenter">
+						</c:if>
+						
+						
+						<img src="<%=basePath%>img/person.png" style="width: 18px;height: 18px;" /></a>
 					</div>
 
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -34,6 +42,9 @@
 							</li>
 							<li>
 								<a href="moodshare">心情站</a>
+							</li>
+							<li class="visible-xs">
+								<a href="${pageContext.request.contextPath }/userQuit">退出</a>
 							</li>							
 						</ul>
 						<div class="nav navbar-nav navbar-right visible-lg" style="padding-top: 15px;">

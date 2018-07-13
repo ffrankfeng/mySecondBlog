@@ -7,6 +7,8 @@ public class MoodShareQueryVo {
 
     private String moodPic;
 
+    private String moodLikeUserId;
+    
     private String moodAuthor;
 
     private String moodDate;
@@ -104,19 +106,24 @@ public class MoodShareQueryVo {
 		this.startRow = startRow;
 	}
 
-	@Override
-	public String toString() {
-		return "MoodShareQueryVo [moodId=" + moodId + ", moodContent=" + moodContent + ", moodPic=" + moodPic
-				+ ", moodAuthor=" + moodAuthor + ", moodDate=" + moodDate + ", moodLike=" + moodLike + ", moodDislike="
-				+ moodDislike + ", page=" + page + ", size=" + size + ", startRow=" + startRow + "]";
+	
+
+	public String getMoodLikeUserId() {
+		return moodLikeUserId;
 	}
 
-	public MoodShareQueryVo(Integer moodId, String moodContent, String moodPic, String moodAuthor, String moodDate,
-			Integer moodLike, Integer moodDislike, Integer page, Integer size, Integer startRow) {
+	public void setMoodLikeUserId(String moodLikeUserId) {
+		this.moodLikeUserId = moodLikeUserId;
+	}
+
+	public MoodShareQueryVo(Integer moodId, String moodContent, String moodPic, String moodLikeUserId,
+			String moodAuthor, String moodDate, Integer moodLike, Integer moodDislike, Integer page, Integer size,
+			Integer startRow) {
 		super();
 		this.moodId = moodId;
 		this.moodContent = moodContent;
 		this.moodPic = moodPic;
+		this.moodLikeUserId = moodLikeUserId;
 		this.moodAuthor = moodAuthor;
 		this.moodDate = moodDate;
 		this.moodLike = moodLike;
@@ -124,6 +131,14 @@ public class MoodShareQueryVo {
 		this.page = page;
 		this.size = size;
 		this.startRow = startRow;
+	}
+
+	@Override
+	public String toString() {
+		return "MoodShareQueryVo [moodId=" + moodId + ", moodContent=" + moodContent + ", moodPic=" + moodPic
+				+ ", moodLikeUserId=" + moodLikeUserId + ", moodAuthor=" + moodAuthor + ", moodDate=" + moodDate
+				+ ", moodLike=" + moodLike + ", moodDislike=" + moodDislike + ", page=" + page + ", size=" + size
+				+ ", startRow=" + startRow + "]";
 	}
 
 	public MoodShareQueryVo() {

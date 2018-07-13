@@ -79,62 +79,38 @@
 							<font size="4">热门博主</font>
 						</div>
 						<div class="col"style="background-color: whitesmoke;margin-top: 2px;margin-left: 2px;">
-							<div class="col-lg" style="height: 70px;background-color: white;border-bottom:1px solid #C5C5C5;">
-								<div class="col-lg">
-									<img src="<%=basePath%>img/person.png" style="margin-top: 2px;margin-left: 2px;width: 36px;height: 36px;"/>&nbsp;
-									<font size="2" style="font-weight: bold;">博主</font>
-									
-									<span style="float: right;margin-top: 22px;margin-right: 4px;">篇</span>
-									<span style="float: right;margin-top: 22px;margin-right: 4px;">12</span>
-								</div>
-								<div class="col-lg"style="margin-top: 2px;margin-left: 4px">
-									<span style="font-size: small; color: #808080;">程序设计，软件工程，人工智能的技术博客</span>
-								</div>
-							</div>
-							<div class="col-lg-6" style="height: 70px;background-color: white;">
-								<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
-									<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
-										<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
-										<font size="2" style="font-weight: bold;">博主</font>
+							<c:set var="row_count" value="0"></c:set>
+							<c:forEach items="${hotUsers }" var="hotuser" >
+								<c:set var="row_count" value="${row_count+1}" />
+								<c:if test="${row_count == 1 }">
+									<div class="col-lg" style="height: 70px;background-color: white;border-bottom:1px solid #C5C5C5;">
+										<div class="col-lg">
+											<img src="<%=basePath%>img/person.png" style="margin-top: 2px;margin-left: 2px;width: 36px;height: 36px;"/>&nbsp;
+											<font size="2" style="font-weight: bold;">${hotuser.userName }</font>
+											
+											<span style="float: right;margin-top: 22px;margin-right: 4px;">篇</span>
+											<span style="float: right;margin-top: 22px;margin-right: 4px;">${hotuser.articlecount }</span>
+										</div>
+										<div class="col-lg"style="margin-top: 2px;margin-left: 4px">
+											<span style="font-size: small; color: #808080;">${hotuser.introduction }</span>
+										</div>
 									</div>
-									<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
-										<span style="font-size: small; color: #808080;">软件工程师</span>
+								</c:if>
+								<c:if test="${row_count != 1 }">
+									<div class="col-lg-6" style="height: 70px;background-color: white;">
+										<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
+											<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
+												<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
+												<font size="2" style="font-weight: bold;">${hotuser.userName }</font>
+											</div>
+											<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
+												<span style="font-size: small; color: #808080;">${hotuser.profession }</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="col-lg-6" style="height: 70px;background-color: white;">
-								<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
-									<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
-										<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
-										<font size="2" style="font-weight: bold;">博主</font>
-									</div>
-									<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
-										<span style="font-size: small; color: #808080;">软件工程师</span>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6" style="height: 70px;background-color: white;">
-								<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
-									<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
-										<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
-										<font size="2" style="font-weight: bold;">博主</font>
-									</div>
-									<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
-										<span style="font-size: small; color: #808080;">软件工程师</span>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6" style="height: 70px;background-color: white;">
-								<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
-									<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
-										<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
-										<font size="2" style="font-weight: bold;">博主</font>
-									</div>
-									<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
-										<span style="font-size: small; color: #808080;">软件工程师</span>
-									</div>
-								</div>
-							</div>
+								</c:if>
+							</c:forEach>
+							
 						</div>
 					</div>
 					<div class="row" style="margin-top: 4px;margin-bottom: 4px;">

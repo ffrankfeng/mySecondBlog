@@ -1,5 +1,7 @@
 package com.fengf.blog.pojo;
 
+import java.util.Date;
+
 public class Moodshare {
     private Integer moodId;
 
@@ -14,6 +16,8 @@ public class Moodshare {
     private Integer moodLike;
 
     private Integer moodDislike;
+
+    private String moodLikeuserid;
 
     public Integer getMoodId() {
         return moodId;
@@ -52,7 +56,7 @@ public class Moodshare {
     }
 
     public void setMoodDate(String moodDate) {
-        this.moodDate = moodDate == null ? null : moodDate.trim();
+        this.moodDate = moodDate;
     }
 
     public Integer getMoodLike() {
@@ -70,4 +74,20 @@ public class Moodshare {
     public void setMoodDislike(Integer moodDislike) {
         this.moodDislike = moodDislike;
     }
+
+    public String getMoodLikeuserid() {
+        return moodLikeuserid;
+    }
+
+    public void setMoodLikeuserid(String moodLikeuserid) {
+        this.moodLikeuserid = moodLikeuserid == null ? null : moodLikeuserid.trim();
+    }
+
+	@Override
+	public String toString() {
+		return "Moodshare [moodId=" + moodId + ", moodContent=" + moodContent + ", moodPic=" + moodPic + ", moodAuthor="
+				+ moodAuthor + ", moodDate=" + moodDate + ", moodLike=" + moodLike + ", moodDislike=" + moodDislike
+				+ ", moodLikeuserid=" + moodLikeuserid + "]";
+	}
+    
 }

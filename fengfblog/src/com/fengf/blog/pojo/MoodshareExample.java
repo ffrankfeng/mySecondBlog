@@ -1,6 +1,7 @@
 package com.fengf.blog.pojo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MoodshareExample {
@@ -384,62 +385,52 @@ public class MoodshareExample {
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateEqualTo(String value) {
+        public Criteria andMoodDateEqualTo(Date value) {
             addCriterion("mood_date =", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateNotEqualTo(String value) {
+        public Criteria andMoodDateNotEqualTo(Date value) {
             addCriterion("mood_date <>", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateGreaterThan(String value) {
+        public Criteria andMoodDateGreaterThan(Date value) {
             addCriterion("mood_date >", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateGreaterThanOrEqualTo(String value) {
+        public Criteria andMoodDateGreaterThanOrEqualTo(Date value) {
             addCriterion("mood_date >=", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateLessThan(String value) {
+        public Criteria andMoodDateLessThan(Date value) {
             addCriterion("mood_date <", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateLessThanOrEqualTo(String value) {
+        public Criteria andMoodDateLessThanOrEqualTo(Date value) {
             addCriterion("mood_date <=", value, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateLike(String value) {
-            addCriterion("mood_date like", value, "moodDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMoodDateNotLike(String value) {
-            addCriterion("mood_date not like", value, "moodDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andMoodDateIn(List<String> values) {
+        public Criteria andMoodDateIn(List<Date> values) {
             addCriterion("mood_date in", values, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateNotIn(List<String> values) {
+        public Criteria andMoodDateNotIn(List<Date> values) {
             addCriterion("mood_date not in", values, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateBetween(String value1, String value2) {
+        public Criteria andMoodDateBetween(Date value1, Date value2) {
             addCriterion("mood_date between", value1, value2, "moodDate");
             return (Criteria) this;
         }
 
-        public Criteria andMoodDateNotBetween(String value1, String value2) {
+        public Criteria andMoodDateNotBetween(Date value1, Date value2) {
             addCriterion("mood_date not between", value1, value2, "moodDate");
             return (Criteria) this;
         }

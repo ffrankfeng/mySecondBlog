@@ -1,5 +1,7 @@
 package com.fengf.blog.service;
 
+import java.util.List;
+
 import com.fengf.blog.pojo.ArticleQueryVo;
 import com.fengf.blog.pojo.Articles;
 import com.fengf.blog.pojo.Users;
@@ -16,5 +18,7 @@ public interface ArticleService {
 	int likeAndDislike(Boolean flag, Integer articleId);
 
 	Users getArticleAuthor(String author);
+
+	List<Users> selectHotUsers();
 
 }

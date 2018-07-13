@@ -37,7 +37,7 @@
 	    <!-- 支持文件上传 -->
     <bean id="multipartResolver" class="com.baidu.ueditor.CommonsMultiparResolver"/>
 	
-	<bean	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 前缀 -->
 		<property name="prefix" value="/WEB-INF/jsp/" />
 		<!-- 后缀 -->
