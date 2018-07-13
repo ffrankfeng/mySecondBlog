@@ -8,9 +8,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fengf.blog.mapper.ArticlelikeMapper;
 import com.fengf.blog.mapper.ArticlesMapper;
 import com.fengf.blog.mapper.UsersMapper;
 import com.fengf.blog.pojo.ArticleQueryVo;
+import com.fengf.blog.pojo.Articlelike;
 import com.fengf.blog.pojo.Articles;
 import com.fengf.blog.pojo.Users;
 import com.fengf.common.utils.Page;
@@ -22,6 +24,8 @@ public class ArticleServiceIpml implements ArticleService {
 	private ArticlesMapper articlesMapper;
 	@Autowired
 	private UsersMapper usersMapper;
+	@Autowired
+	private ArticlelikeMapper articlelikeMapper;
 	
 	public String getupDate() throws ParseException{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -77,16 +81,24 @@ public class ArticleServiceIpml implements ArticleService {
 		return articlesMapper.selectByPrimaryKey(articleId);
 	}
 	@Override
-	public int likeAndDislike(Boolean flag,Integer articleId) {
+	public int likeAndDislike(Boolean flag,Integer articleId, Integer userId) {
 		int flag1=0;
+		int insertflag=0;
 		Articles article = articlesMapper.selectByPrimaryKey(articleId);
+		Articlelike articlelike = new Articlelike();
+		articlelike.setArticleId(articleId);
+		articlelike.setUserId(userId);
 		if(flag){
+			articlelike.setLikeordislike("like");
 			article.setLikecount(article.getLikecount()+1);
+			insertflag=articlelikeMapper.insertSelective(articlelike);
 			flag1=articlesMapper.updateLikeByPrimaryKey(article);
 			return article.getLikecount();
 		}
 		else{
+			articlelike.setLikeordislike("dislike");
 			article.setDislike(article.getDislike()-1);
+			insertflag=articlelikeMapper.insertSelective(articlelike);
 			flag1=articlesMapper.updateDisLikeByPrimaryKey(article);
 			return article.getDislike();
 		}
@@ -100,5 +112,12 @@ public class ArticleServiceIpml implements ArticleService {
 	public List<Users> selectHotUsers() {
 		return usersMapper.selectHotUsers(5);
 	}
-
+	@Override
+	public Articlelike getUserLikeAndDisLike(Integer articleId, Integer userId) {
+		Articlelike articlelike= new Articlelike();
+		articlelike.setArticleId(articleId);
+		articlelike.setUserId(userId);
+		return articlelikeMapper.selectByArticleIdAndUserId(articlelike);
+	}
+	
 }
