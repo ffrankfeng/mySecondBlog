@@ -19,7 +19,7 @@
 <!--设置视口的宽度(值为设备的理想宽度)，页面初始缩放值<理想宽度/可见宽度>-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-<title>我的动态</title>
+<title>热门博主</title>
 
 <!-- 引入Bootstrap核心样式文件 -->
 <link href="<%=basePath%>css/bootstrap.css" rel="stylesheet">
@@ -29,70 +29,29 @@
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
 <script type="text/javascript">
-/* function submitmymood(){
-	var moodContent =$("#moodContent").val();
-	var moodPic =$("#moodPic").val();
-	alert(moodPic);
-	$.post(
-			"${pageContext.request.contextPath}/writeMyMood",
-			{"moodContent":moodContent,"moodPic":moodPic},
-			function(data){
-				var isCorrect=data.isCorrect;
-				if(isCorrect){
-					alert("发布成功！");
-			 	}
-				else{
-					alert("发布失败，请重新发布！");
-				}
-				location.reload();
-			},
-			"json"
+/* 	function likeUserMood(moodId){
+		
+			$.post(
+					"${pageContext.request.contextPath}/likeMood",
+					{"moodId":moodId},
+					function(data){
+						var isFinish=data.isFinish;
+						
+						if(isFinish == true){
+							location.reload();
+						}else{
+							alert("操作失败！");
+						}
+					},
+					"json"
 			);
-				
-} */
-
-function checksubmint(){
-	var moodContent =$("#moodContent").val();
-	var flag=true;
-	if(moodContent==""){
-		flag=false;
-		alert("请输入文字");
-	}
-
-	return flag;
-}
-window.onload = function () {
-	//选择图片类型
-	var imgType = ["image/jpeg","image/png","image/x-png","image/bmp","image/gif"];
-	
-	//回显图片
-    var fr = new FileReader(),
-        file = document.getElementById("moodPic"),
-        img = document.createElement("img");
-	img.style="width:200px;height:240px";
-    file.onchange = function(e){
-    	for(var i = 0 ; i < imgType.length ; i++){
-        	if(file.files[0].type == imgType[i]){
-        		fr.onload = function(e){
-                    var res = this.result;
-                    img.src = res;
-
-                    document.getElementById("preImg").appendChild(img);//显示
-                };
-
-                fr.readAsDataURL(file.files[0]);//读取文件
-                break;
-        	}
-        }
-    }
-}
+	} */
 </script>
 </head>
 <body style="background-image:url(<%=basePath%>img/background1.png);">
 	<!--导航栏-->
 	<jsp:include page="header.jsp"></jsp:include>
 	<div class="container"style="margin-top:2%;">
-			
 			<div class="row" style="min-height: 600px;">
 				<div class="col-lg-3 hidden-xs"style="margin-right: 45px;height: 800px;border-bottom: 1px solid #C5C5C5;background-color: white;">
 					<div class="row" style=" ">
@@ -108,6 +67,7 @@ window.onload = function () {
 						
 							<font size="2" style="font-weight: bold;">${current_user.userName }</font>
 							<a data-toggle="modal" data-target="#editDialog" onclick="edituser()"> <span style="float: right;margin-top: 2px;margin-right: 4px;">修改</span></a>
+							
 							<img src="<%=basePath%>img/file_edit48.png" style="margin-top: 4px;float: right;width: 15px;height: 15px;"/>
 							
 						</div>
@@ -181,67 +141,59 @@ window.onload = function () {
 				<div class="col-lg-8 col-xs-12" style="background-color: white;">
 					<div class="row" style="border-bottom: 1px solid #C5C5C5;">
 						<div class="col-lg-4 col-xs-4" style="background-color:#FFFFCC;border-radius:0 40px 40px 0;vertical-align: middle;">
-							<img src="<%=basePath%>img/favourites2.png" style="width: 30px;height: 30px;"/>
+							<img src="<%=basePath%>img/hot.png" style="width: 30px;height: 30px;"/>
 							<font style="font-weight:bold;font-size:400;">
-								全部动态
+								HOT
 							</font>
 							
 						</div>
 					</div>
 					<br />
-					<div class="row" style="background-color:white;height: 145px;">
-						<div class="" style="margin-bottom: 4%;border-bottom: 1px solid #C5C5C5;">
-							<form name="form" action="${pageContext.request.contextPath }/writeMyMood" method="post" enctype="multipart/form-data" onsubmit="return checksubmint()">
-								<div class="col-lg-10 col-xs-10" style="margin-bottom: 2%;">
-									<textarea style="height: 100%;width: 100%;resize: none; maxlength="100"  onchange="this.value=this.value.substring(0, 100)" onkeydown="this.value=this.value.substring(0, 100)" onkeyup="this.value=this.value.substring(0, 100)"  id="moodContent" name="moodContent" placeholder="想说点什么。。。"></textarea>
+					
+				<div class="row" style="background-color:white;height: 145px;">
+					<div class="col-lg-12 col-xs-12" style="border-bottom: 1px solid #C5C5C5;" align="center">
+						<form   method="post" action="${pageContext.request.contextPath }/hotuser" class="form-inline"  id="searchform" >
+						<div class="col-lg-8 col-xs-9" style="text-align: right;margin-bottom: 2%;">
+				            <input type="text" class="form-control"style="width: 250px" placeholder="查询用户"  id="userName" name="userName">
+				        </div> 
+				        <div class="col-lg-4 col-xs-3" style="text-align: left;margin-bottom: 2%;">         
+				            <input type="submit" class="btn" value="查询">
+				        </div> 
+				        </form>
+					</div>
+						<c:forEach items="${page.rows }" var="hotuser"> 
+						<a href="personcenter?userId=${hotuser.userId}">
+							<div class="col-lg-12 col-xs-12" style="">
+								<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;margin-top: 2%;">
+									<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;border-radius:25px;background-color: yellow;"/>&nbsp;
+										<font style="margin-top: 1%;font-size: large;">${hotuser.userName }</font>&emsp;
+										<font style="margin-top: 1%;font-size: small;">${hotuser.introduction }</font>
 								</div>
-								<div class="col-lg-2 col-xs-2" >
-									<input type="submit" class="btn btn-info" style="margin-left: 2%" value="发布" style="font-size: 80%;" />
-								</div>
-								
-									<div class="box" id="preImg" style="margin-left: 1%;"></div>
-									<input type="file" class="btn btn-info" accept="image/*" style="margin-left:3%;margin-bottom:4%; inline-block;" id="moodPic" name="moodPic">
-								
-								
-							</form> 
-						</div>
-						<!--<input type="file" class="btn btn-default" accept="image/*" style="display: inline-block;">-->
-<!-- 									<input type="file" name="picpath" id="picpath" style="display:none;"accept="image/*" onChange="document.form.path.value=this.value">
-									<input name="path" id="path" class="btn btn-group-xs" readonly placeholder="请选择上传的图片"  style="font-size: 80%;">
-									<input type="button" class="btn btn-default" value="上传照片" onclick="document.form.picpath.click()"style="font-size: 80%;">  -->
-						<c:forEach items="${page.rows }" var="mood"> 
-						<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;">
-							<div class="col-lg-1 hidden-xs" style="margin-right: 2%;" >
-								<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;float: left;border-radius:25px;background-color: red;"/>&nbsp;
-							</div>
-							<div class="col-lg-8 col-xs-12" style="border: 1px solid #C5C5C5;">
-								<font style="margin-top: 1%;font-size: small;">${mood.moodDate }</font>
-								<div class="col-lg-12 col-xs-12" style="color: #808080;margin-top: 2%;">
-									<span style="color: black;">
-										${mood.moodContent }
-										&nbsp;<br/>&nbsp;
-									</span>
-									<img src="${mood.moodPic }" class="col-xs-12" style="max-width: 600px;max-height: 600px;"/>
+								<div class="col-lg-12 col-xs-12" style="color: #808080;">
+									<table style="float: right;">
+										<tr>
+											<th>文章：</th><th width="12%">${hotuser.articlecount }</th>
+											<th>心情：</th><th width="12%">${hotuser.moodcount }</th>
+											<th>关注：</th><th width="12%">${hotuser.attention }</th>
+											<th>粉丝：</th><th width="12%">${hotuser.fans }</th>
+										</tr>
+									</table>
+									
 								</div>
 								<div class="col-lg-12 col-xs-12" style="margin-top: 2%;border-bottom: 1px solid #C5C5C5;">
-									 <div class="col-lg-3 col-xs-4"style="float: right;margin-bottom: 2%;">
-										<img src="<%=basePath%>img/like3.png" style="width: 20px;height: 20px;" onclick=""/>&nbsp;
-										<span style="font-size: large;">${mood.moodLike }</span>&emsp;
-
-									</div>
+									<div class="col-lg-9 col-xs-9"style="margin-bottom: 2%;"></div>
+									<div class="col-lg-3 col-xs-3"style="margin-bottom: 2%;"></div>
 								</div>
-							</div>
-						</div>
+							</div></a>
 						</c:forEach>
-
-						<div class="col-md-12 text-right">
-							<fengf:page url="${pageContext.request.contextPath }/mymoodshare" />
+						<div class="col-lg-12 col-xs-12 text-right">
+							<fengf:page url="${pageContext.request.contextPath }/hotuser" />
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-				<!-- 编辑对话框 -->
+		<!-- 编辑对话框 -->
 		<div class="modal" id="editDialog" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel">
 			<div class="modal-dialog" role="document">

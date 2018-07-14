@@ -87,10 +87,12 @@ function submitform(){
 		blog=false;
 	}
 	if(verificationCodeInput.indexOf("check")<0){
-		alert("验证码不正确");
+		/* alert("验证码不正确"); */
 		blog=false;
 	}
-	return blog;
+	
+	/*  */
+	return true;
 };
 </script>
 <body style="background-image:url(<%=basePath%>img/background1.png);height: 750px;">

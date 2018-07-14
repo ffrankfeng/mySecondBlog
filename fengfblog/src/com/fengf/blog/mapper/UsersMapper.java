@@ -1,5 +1,6 @@
 package com.fengf.blog.mapper;
 
+import com.fengf.blog.pojo.UserQueryVo;
 import com.fengf.blog.pojo.Users;
 import com.fengf.blog.pojo.UsersExample;
 import java.util.List;
@@ -27,10 +28,30 @@ public interface UsersMapper {
     int updateByPrimaryKeySelective(Users record);
 
     int updateByPrimaryKey(Users record);
+    Users selectByusername(String userName);
 
-	Users selectByusername(String userName);
-
-	void addUserArticleCount(Integer userId);
+	int addUserArticleCount(Integer userId);
 
 	List<Users> selectHotUsers(int i);
+
+	int userCountByQueryVo(UserQueryVo vo);
+
+	List<Users> selectUserListByQueryVo(UserQueryVo vo);
+
+	int addUserFansByUserId(Integer userId);
+	int deleteUserFansByUserId(Integer userId);
+
+	int addUserAttentionByUserId(Integer current_userId);
+	
+	int deleteUserAttentionByUserId(Integer current_userId);
+
+	int attentionCountByQueryVo(UserQueryVo vo);
+
+	List<Users> selectAttentionListByQueryVo(UserQueryVo vo);
+
+	int addUserMood(String moodAuthor);
+
+	int fansCountByQueryVo(UserQueryVo vo);
+
+	List<Users> selectFansListByQueryVo(UserQueryVo vo);
 }

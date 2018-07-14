@@ -16,12 +16,14 @@ public interface ArticleService {
 
 	Articles showarticle(Integer articleId);
 
-	int likeAndDislike(Boolean flag, Integer articleId, Integer userId);
+	boolean likeAndDislike(Boolean flag, Integer articleId, Integer userId);
 
 	Users getArticleAuthor(String author);
 
 	List<Users> selectHotUsers();
 
 	Articlelike getUserLikeAndDisLike(Integer articleId, Integer userId);
+
+	boolean getIsAttention(Integer userId, String author);
 
 }

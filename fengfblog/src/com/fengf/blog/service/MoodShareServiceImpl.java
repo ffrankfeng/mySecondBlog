@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fengf.blog.mapper.MoodshareMapper;
+import com.fengf.blog.mapper.UsersMapper;
 import com.fengf.blog.pojo.MoodShareQueryVo;
 import com.fengf.blog.pojo.Moodshare;
 import com.fengf.common.utils.Page;
@@ -19,6 +20,8 @@ public class MoodShareServiceImpl implements MoodShareService {
 
 	@Autowired
 	private MoodshareMapper moodshareMapper;
+	@Autowired
+	private UsersMapper usersMapper;
 	@Override
 	public Page<MoodShareQueryVo> selectAllMood(MoodShareQueryVo vo) {
 		Page<MoodShareQueryVo> page=new Page<MoodShareQueryVo>();
@@ -57,7 +60,11 @@ public class MoodShareServiceImpl implements MoodShareService {
 		moodshare.setMoodDislike(0);
 		moodshare.setMoodLike(0);
 		int flag = moodshareMapper.insertSelective(moodshare);
-		if(flag>0) return true;
+		if(flag>0){
+			int flag2 = usersMapper.addUserMood(moodshare.getMoodAuthor());
+			if(flag2>0) return true;
+			else return false;
+		}
 		else return false;
 	}
 	@Override

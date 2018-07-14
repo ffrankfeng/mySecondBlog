@@ -20,25 +20,21 @@
 					        <span class="icon-bar"></span>
 					    </button>
 						<a class="navbar-brand" href="index">首页</a>
-						<a class="navbar-brand hidden-lg" href="#"><img src="<%=basePath%>img/search.png" style="width: 18px;height: 18px;" /></a>
+						<a class="navbar-brand hidden-lg" href="userarticlelist"><img src="<%=basePath%>img/search.png" style="width: 18px;height: 18px;" /></a>
 						<c:if test="${current_user == null }">
 							<a class="navbar-brand hidden-lg" href="login">
 						</c:if>
 						<c:if test="${current_user != null }">
-							<a class="navbar-brand hidden-lg" href="personcenter">
+							<a class="navbar-brand hidden-lg" href="myinformation">
 						</c:if>
-						
-						
 						<img src="<%=basePath%>img/person.png" style="width: 18px;height: 18px;" /></a>
 					</div>
 
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
+						
 							<li>
-								<a href="#">关注</a>
-							</li>
-							<li>
-								<a href="#">热门博主</a>
+								<a href="hotuser">热门博主</a>
 							</li>
 							<li>
 								<a href="moodshare">心情站</a>
@@ -54,26 +50,26 @@
 							</c:if>
 			
 							<c:if test="${!empty current_user }">
-							<a href="personcenter"><img src="<%=basePath%>img/person.png" style="width: 20px;height: 20px;" /></a>
+							<a href="myinformation"><img src="<%=basePath%>img/person.png" style="width: 20px;height: 20px;" /></a>
 							<a href="${pageContext.request.contextPath }/userQuit">退出</a>
 							</c:if>
 						</div>
-						<form class="navbar-form navbar-right visible-lg" role="search">
+						<form class="navbar-form navbar-right visible-lg" method="post" action="${pageContext.request.contextPath }/userarticlelist" role="search">
 							<div class="form-group">
-								<input type="text" class="form-control" placeholder="Search">
-								<img src="<%=basePath%>img/search.png" style="width: 18px;height: 18px;" />
+								<input type="text" class="form-control" placeholder="Search" id="title" name="title">
+								<input type="submit" class="btn btn-default" style="" value="搜索" />
 							</div>
 							<!--<button type="submit" class="btn btn-default">Submit</button>-->
 						</form>
 						<div class="nav navbar-nav navbar-right" >
 							<ul class="nav navbar-nav">
 							<li>
-								<a href="writing" class="navbar-left"> <img src="<%=basePath%>img/write.png" style="width: 18px;height: 18px;" />
+								<a href="writing" class="navbar-left"><img src="<%=basePath%>img/write.png" style="width: 18px;height: 18px;" />
 									<span>写文章</span>
 								</a>
 							</li>
 							<li>
-								<a href="mymoodshare" class="navbar-left"> <img src="<%=basePath%>img/mood.png" style="width: 18px;height: 18px;" />
+								<a href="mymoodshare" class="navbar-left"><img src="<%=basePath%>img/mood.png" style="width: 18px;height: 18px;" />
 									<span>发心情</span>
 								</a>
 							</li>

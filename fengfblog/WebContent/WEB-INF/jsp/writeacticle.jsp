@@ -51,7 +51,7 @@ var ue = UE.getEditor('editor', {
 function getContent() {
 
     var article=UE.getEditor('editor').getContent();
-    var title=$("#title").val();
+    var title=$("#arttitle").val();
     var isOpen=$("#isOpen").val();
     var keyword1=$("#keyword1").val();
     var keyword2=$("#keyword2").val();
@@ -60,22 +60,21 @@ function getContent() {
         $.post(
     			"${pageContext.request.contextPath}/savewriting",//url地址
     			{"title":title,"content":article,"isopen":isOpen,"keyword1":keyword1,"keyword2":keyword2,"keyword3":keyword3},//请求参数
-    			function(data){//执行成功后的回调函数
+    			function(data){
     				var isFinish=data.isFinish;
-    			if(isFinish){
+    				alert(isFinish);
+    				if(isFinish==true){
     				alert("提交成功！");
     				window.location.href="index";
-    			}else{
-    				alert("提交失败请重新尝试");
-    			}
+    				}else{
+    					alert("提交失败请重新尝试");
+    				}
     			},
     			"json"
     	);
     }else{
-    	alert("请填写完整文章");
+    	alert("请填写完整文章.");
     }
-
-
 }
 </script>
 </head>
@@ -93,19 +92,19 @@ function getContent() {
 					<div class="row" style="margin-top: 2%;margin-bottom: 2%;">
 							<div class="col-lg-2"></div>
 							<div class="col-lg-8" style="margin-top: 2%;margin-bottom: 4%;">
-								<input type="text" id="title" name="title" class="form-control" placeholder="输入文章标题" />
+								<input type="text" id="arttitle" name="arttitle" class="form-control" placeholder="输入文章标题" />
 							</div>
 							<div  class="col-lg-12" style="">
 								<script id="editor" type="text/plain" style="width:100%;height:500px;"></script>
 							</div>
 							<div class="col-lg-3"></div>
 							<div class="col-lg-6" style="margin-top: 4%;text-align: left;">
-								<label style="font-size: initial;">公开:</label>
-								<input id="isOpen"  name="isOpen" type="checkbox" style="margin-left: 5%;" checked="checked"/><br />
+							<!-- 	<label style="font-size: initial;">公开:</label>
+								<input id="isOpen"  name="isOpen" type="checkbox" style="margin-left: 5%;" checked="checked"/><br /> -->
 								<label style="font-size: initial;">标签:</label>
-								<input type="text" class="form-inline" style="margin-left: 5%;width: 22%;height:70%;border-radius: 10px;" id="keyword1" name="keyword1"/>
-								<input type="text" class="form-inline" style="margin-left: 5%;width: 22%;height:70%;border-radius: 10px;" id="keyword2" name="keyword2"/>
-								<input type="text" class="form-inline" style="margin-left: 5%;width: 22%;height:70%;border-radius: 10px;" id="keyword3" name="keyword3"/><br />
+								<input type="text" class="form-inline" style="margin-left: 5%;width: 20%;height:70%;border-radius: 10px;font-size: initial;" id="keyword1" name="keyword1"/>
+								<input type="text" class="form-inline " style="margin-left: 5%;width: 20%;height:70%;border-radius: 10px;font-size: initial;" id="keyword2" name="keyword2"/>
+								<input type="text" class="form-inline " style="margin-left: 5%;width: 20%;height:70%;border-radius: 10px;font-size: initial;" id="keyword3" name="keyword3"/><br />
 							</div>
 							<div class="col-lg-5 col-xs-4"></div>
 							<div class="col-lg-6 col-xs-6" style="margin-top: 4%;text-align: left;">

@@ -29,15 +29,52 @@
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
 <script type="text/javascript">
+	function attention(authorId){
+		$.post(
+				"${pageContext.request.contextPath}/attention",
+				{"userId":authorId},
+				function(data){
+					var isFinish=data.isFinish;
+					if(isFinish == false){
+						alert("关注失败");
+					}else{
+						alert("关注成功");
+						location.reload();
+					}
+				},
+				"json"
+		);
+}
+function deleteAttention(authorId){
+	if(confirm("确定不再关注ta？")){	
+		$.post(
+				"${pageContext.request.contextPath}/deleteAttention",
+				{"userId":authorId},
+				function(data){
+					var isFinish=data.isFinish;
+					if(isFinish == false){
+						alert("取消关注失败");
+					}else{
+						alert("取消关注成功");
+						location.reload();
+					}
+				},
+				"json"
+		);
+	}
+}
 	function likeAndDislike(articleId,flag){
 		if(flag){
 			$.post(
 					"${pageContext.request.contextPath}/likeAndDislike",
 					{"flag":flag,"articleId":articleId},
 					function(data){
-						var count=data.isCorrect;
-						$("#thumbsup").css("color","red");
-						$("#thumbsup").html("("+count+")");
+						var isFinish=data.isFinish;
+						if(isFinish == false){
+							alert("操作失败");
+						}else{
+							location.reload();
+						}
 					},
 					"json"
 			);
@@ -46,9 +83,12 @@
 					"${pageContext.request.contextPath}/likeAndDislike",
 					{"flag":flag,"articleId":articleId},
 					function(data){
-						var count=data.isCorrect;
-						$("#disthumbsup").css("color","red");
-						$("#disthumbsup").html("("+count+")");
+						var isFinish=data.isFinish;
+						if(isFinish == false){
+							alert("操作失败");
+						}else{
+							location.reload();
+						}
 					},
 					"json"
 				);
@@ -65,7 +105,13 @@
 					<span  style="font-weight:bold;font-size:200%;margin-left: 10%;">
 						${article.author }的博文	
 					</span>
-					<input type="button" class="btn btn-default"style="width:100px;float: right;margin-right: 20%;color: red;border-color: red;" value="关注" />
+					<c:if test="${isAttention == false}">
+						<input type="button" class="btn btn-default" onclick="attention(${article.authorId })" style="width:100px;float: right;margin-right: 20%;color: red;border-color: red;" value="关注" />
+					</c:if>
+					<c:if test="${isAttention == true}">
+						<input type="button" class="btn btn-default" onclick="deleteAttention(${article.authorId })" style="width:100px;float: right;margin-right: 20%;color: red;background-color:#FF9966; border-color:#FF9900;" value="已关注" />
+					</c:if>
+
 				</div>
 			</div>
 		</div>
@@ -96,16 +142,41 @@
 						</span>
 					</div>
 					<div class="col-lg-4 col-xs-4"></div>
-					<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
-						<span id="thumbsup" style="font-size: large;"><a onclick="likeAndDislike(${article.articleId },true)"><img src="<%=basePath%>img/like3.png" style="width: 30px;height: 30px;" onclick="" /></a>
-						&emsp;(${article.likecount })</span>
-					</div>
-					<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
-						<span id="disthumbsup" style="font-size: large;"><a onclick="likeAndDislike(${article.articleId },false)"><img src="<%=basePath%>img/dislike.png" style="width: 30px;height: 30px;"/></a>
-						&emsp;(${article.dislike })</span>
-					</div>
-					
-					<!-- <div class="col-lg-12 col-xs-12" style="margin-top: 4%;height: 80px;">
+					<c:if test="${articlelike == null}">
+						<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+							<span id="thumbsup" style="font-size: large;"><a onclick="likeAndDislike(${article.articleId },true)"><img src="<%=basePath%>img/like3.png" style="width: 30px;height: 30px;" onclick="" /></a>
+							&emsp;${article.likecount }</span>
+						</div>
+						<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
+							<span id="disthumbsup" style="font-size: large;"><a onclick="likeAndDislike(${article.articleId },false)"><img src="<%=basePath%>img/dislike.png" style="width: 30px;height: 30px;"/></a>
+							&emsp;${article.dislike }</span>
+						</div>
+					</c:if>
+					<c:if test="${articlelike != null}">
+						<c:if test="${articlelike.likeordislike == 'like'}">
+							<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+								<span id="thumbsup" style="font-size: large;color: red"><img src="<%=basePath%>img/finishlike.png" style="width: 30px;height: 30px;" onclick="" />
+								&emsp;${article.likecount }</span>
+							</div>
+							<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
+								<span id="disthumbsup" style="font-size: large;"><img src="<%=basePath%>img/dislike.png" style="width: 30px;height: 30px;"/>
+								&emsp;${article.dislike }</span>
+							</div>
+						</c:if>
+						
+						<c:if test="${articlelike.likeordislike == 'dislike'}">
+							<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+								<span id="thumbsup" style="font-size: large;"><img src="<%=basePath%>img/like3.png" style="width: 30px;height: 30px;" onclick="" />
+								&emsp;${article.likecount }</span>
+							</div>
+							<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
+								<span id="disthumbsup" style="font-size: large;color: #DDDDDD"><img src="<%=basePath%>img/finishdislike3.png" style="width: 30px;height: 30px;"/>
+								&emsp;${article.dislike }</span>
+							</div>
+						</c:if>
+					</c:if>
+								
+					<div class="col-lg-12 col-xs-12" style="margin-top: 4%;height: 80px;">
 						<textarea style="height: 100%;width: 100%;resize: none;">想对作者说点什么。。。
 						</textarea>
 					</div>
@@ -141,7 +212,7 @@
 						<span style="margin-top: 2%;margin-left: 4%;">
 						感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。
 						</span>
-					</div> -->
+					</div>
 				</div>
 				<div class="col-lg-3 hidden-xs"style="margin-left: 15px; height: 800px;">
 					<div class="row">

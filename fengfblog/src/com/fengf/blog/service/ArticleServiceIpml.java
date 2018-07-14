@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.fengf.blog.mapper.ArticlelikeMapper;
 import com.fengf.blog.mapper.ArticlesMapper;
+import com.fengf.blog.mapper.AttentionMapper;
 import com.fengf.blog.mapper.UsersMapper;
 import com.fengf.blog.pojo.ArticleQueryVo;
 import com.fengf.blog.pojo.Articlelike;
 import com.fengf.blog.pojo.Articles;
+import com.fengf.blog.pojo.Attention;
 import com.fengf.blog.pojo.Users;
 import com.fengf.common.utils.Page;
 
@@ -26,6 +28,8 @@ public class ArticleServiceIpml implements ArticleService {
 	private UsersMapper usersMapper;
 	@Autowired
 	private ArticlelikeMapper articlelikeMapper;
+	@Autowired
+	private AttentionMapper attentionMapper;
 	
 	public String getupDate() throws ParseException{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -45,14 +49,15 @@ public class ArticleServiceIpml implements ArticleService {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-		System.out.println(articles);
+	
 		int flag = articlesMapper.insertSelective(articles);
 		if(flag<=0)
 			return false;
 		else {
 			Users users = usersMapper.selectByusername(articles.getAuthor());
-			usersMapper.addUserArticleCount(users.getUserId());
-			return true;
+			int flag1 = usersMapper.addUserArticleCount(users.getUserId());
+			if(flag1>0)return true;
+			else return false;
 		}
 			
 	}
@@ -81,7 +86,7 @@ public class ArticleServiceIpml implements ArticleService {
 		return articlesMapper.selectByPrimaryKey(articleId);
 	}
 	@Override
-	public int likeAndDislike(Boolean flag,Integer articleId, Integer userId) {
+	public boolean likeAndDislike(Boolean flag,Integer articleId, Integer userId) {
 		int flag1=0;
 		int insertflag=0;
 		Articles article = articlesMapper.selectByPrimaryKey(articleId);
@@ -93,14 +98,14 @@ public class ArticleServiceIpml implements ArticleService {
 			article.setLikecount(article.getLikecount()+1);
 			insertflag=articlelikeMapper.insertSelective(articlelike);
 			flag1=articlesMapper.updateLikeByPrimaryKey(article);
-			return article.getLikecount();
+			return flag1>0&&insertflag>0?true:false;
 		}
 		else{
 			articlelike.setLikeordislike("dislike");
-			article.setDislike(article.getDislike()-1);
+			article.setDislike(article.getDislike()+1);
 			insertflag=articlelikeMapper.insertSelective(articlelike);
 			flag1=articlesMapper.updateDisLikeByPrimaryKey(article);
-			return article.getDislike();
+			return flag1>0&&insertflag>0?true:false;
 		}
 	}
 	@Override
@@ -117,7 +122,20 @@ public class ArticleServiceIpml implements ArticleService {
 		Articlelike articlelike= new Articlelike();
 		articlelike.setArticleId(articleId);
 		articlelike.setUserId(userId);
+		
 		return articlelikeMapper.selectByArticleIdAndUserId(articlelike);
+	}
+	@Override
+	public boolean getIsAttention(Integer userId, String author) {
+		Users attentionAuthor = usersMapper.selectByusername(author);
+		Attention record = new Attention();
+		record.setUserId(userId);
+		record.setAttuserId(attentionAuthor.getUserId());
+		System.out.println(record);
+		Attention attention = attentionMapper.selectByAuthorIdAndUserId(record);
+		System.out.println(attention);
+		if(attention == null) return false;
+		else return true;
 	}
 	
 }

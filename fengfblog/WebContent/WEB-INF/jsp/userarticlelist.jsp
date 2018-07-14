@@ -40,11 +40,31 @@
 						<div class="col-lg-4" style="background-color:#FFFFCC;">
 							<img src="<%=basePath%>img/reading.png" style="width: 40px;height: 40px;"/>
 							<span style="font-weight:bold;font-size:large;">
-								精品文章
+								搜索
 							</span>
 						</div>
 					</div>
 					<br />
+					<div class="row" style="background-color:white;border-bottom:1px solid #C5C5C5;">
+					<div class="col-lg-12 col-xs-12" style="margin-top:2%;border-bottom: 1px solid #C5C5C5;" align="center">
+						<c:if test="${!empty search }">
+							<form   method="post" action="${pageContext.request.contextPath }/userarticlelist?userId=${search} " class="form-inline"  id="searchform" >
+						</c:if>
+						<c:if test="${empty search }">
+							<form   method="post" action="${pageContext.request.contextPath }/userarticlelist" class="form-inline"  id="searchform" >
+						</c:if>
+						
+						<div class="col-lg-10 col-xs-10" style="text-align: right;margin-bottom: 2%;">
+				            <input type="text" class="form-control"style="width: 100%" id="title" name="title">
+				        </div> 
+				        <div class="col-lg-2 col-xs-2" style="text-align: left;margin-bottom: 2%;">         
+				            <input type="submit" class="btn" value="查询">
+				        </div> 
+				        </form>
+					</div>
+					</div>
+						
+
 					<c:forEach items="${page.rows }" var="article"> 
 						<div class="row" style="background-color:white;height: 145px;border-bottom:1px solid #C5C5C5;">
 							<a href="showarticle?articleId=${article.articleId }">
@@ -55,22 +75,17 @@
 								<div class="col-lg" style="height:40px ; color: #808080;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
 									${article.content }
 								</div>
-								<div class="col-lg" style="margin-top: 1%;">
-									<div class="col-lg-4 hidden-xs">
+								<div class="col-lg" style="">
+									<div class="col-lg-4 col-xs-4">
 										<img src="<%=basePath%>img/person.png" style="width: 20px;height: 20px;"/>&nbsp;
 										<font style="margin-top: 1%;">${article.author }</font>
-									</div>
-									<div class="col-lg-3"style="float: right;">
-										<span id="readCount">${article.reading }</span><span> 阅读</span>&nbsp;
-										<span id="comCount">0</span><span> 评论</span>
-										
 									</div>
 								</div>
 							</div></a>
 						</div>
 					</c:forEach>
 					<div class="col-md-12 text-right">
-						<fengf:page url="${pageContext.request.contextPath }/index" />
+						<fengf:page url="${pageContext.request.contextPath }/userarticlelist" />
 					</div>
 				</div>
 				<div class="col-lg-3 hidden-xs"style="margin-left: 15px; height: 800px;">
@@ -87,7 +102,7 @@
 									<div class="col-lg" style="height: 70px;background-color: white;border-bottom:1px solid #C5C5C5;">
 										<div class="col-lg">
 											<img src="<%=basePath%>img/person.png" style="margin-top: 2px;margin-left: 2px;width: 36px;height: 36px;"/>&nbsp;
-											<a href="personcenter?userId=${hotuser.userId}"><font size="2" style="font-weight: bold;">${hotuser.userName }</font></a>
+											<font size="2" style="font-weight: bold;">${hotuser.userName }</font>
 											
 											<span style="float: right;margin-top: 22px;margin-right: 4px;">篇</span>
 											<span style="float: right;margin-top: 22px;margin-right: 4px;">${hotuser.articlecount }</span>
@@ -102,7 +117,7 @@
 										<div class="col-lg" style="height: 60px;width:125px;background-color: whitesmoke;">
 											<div class="col-lg" style="margin-top: 5px;margin-left: 1px;" >
 												<img src="<%=basePath%>img/person.png" style="margin-top: 1px;margin-left: 1px;width: 28px;height: 28px;"/>&nbsp;
-												<a href="personcenter?userId=${hotuser.userId}"><font size="2" style="font-weight: bold;">${hotuser.userName }</font></a>
+												<font size="2" style="font-weight: bold;">${hotuser.userName }</font>
 											</div>
 											<div class="col-lg"style="margin-top: 4px;margin-left: 2px">
 												<span style="font-size: small; color: #808080;">${hotuser.profession }</span>

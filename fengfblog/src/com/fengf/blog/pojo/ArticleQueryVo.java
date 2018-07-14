@@ -1,12 +1,12 @@
 package com.fengf.blog.pojo;
 
 public class ArticleQueryVo {
-	
-	
 	  	private Integer articlesId;
 
 	    private String title;
 
+	    private Integer authorId;
+	    
 	    private String keyword1;
 
 	    private String keyword2;
@@ -22,12 +22,7 @@ public class ArticleQueryVo {
 	  	//开始行
 	  	private Integer startRow=0;
 
-		@Override
-		public String toString() {
-			return "ArticleQueryVo [articlesId=" + articlesId + ", title=" + title + ", keyword1=" + keyword1
-					+ ", keyword2=" + keyword2 + ", keyword3=" + keyword3 + ", page=" + page + ", size=" + size
-					+ ", startRow=" + startRow + "]";
-		}
+		
 
 		public Integer getArticlesId() {
 			return articlesId;
@@ -98,11 +93,20 @@ public class ArticleQueryVo {
 			// TODO 自动生成的构造函数存根
 		}
 
-		public ArticleQueryVo(Integer articlesId, String title, String keyword1, String keyword2, String keyword3,
-				Integer page, Integer size, Integer startRow) {
+		public Integer getAuthorId() {
+			return authorId;
+		}
+
+		public void setAuthorId(Integer authorId) {
+			this.authorId = authorId;
+		}
+
+		public ArticleQueryVo(Integer articlesId, String title, Integer authorId, String keyword1, String keyword2,
+				String keyword3, Integer page, Integer size, Integer startRow) {
 			super();
 			this.articlesId = articlesId;
 			this.title = title;
+			this.authorId = authorId;
 			this.keyword1 = keyword1;
 			this.keyword2 = keyword2;
 			this.keyword3 = keyword3;
@@ -110,5 +114,13 @@ public class ArticleQueryVo {
 			this.size = size;
 			this.startRow = startRow;
 		}
+
+		@Override
+		public String toString() {
+			return "ArticleQueryVo [articlesId=" + articlesId + ", title=" + title + ", authorId=" + authorId
+					+ ", keyword1=" + keyword1 + ", keyword2=" + keyword2 + ", keyword3=" + keyword3 + ", page=" + page
+					+ ", size=" + size + ", startRow=" + startRow + "]";
+		}
+
 
 }

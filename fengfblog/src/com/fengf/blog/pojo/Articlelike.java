@@ -52,4 +52,11 @@ public class Articlelike {
     public void setLodTime(Date lodTime) {
         this.lodTime = lodTime;
     }
+
+	@Override
+	public String toString() {
+		return "Articlelike [ladId=" + ladId + ", articleId=" + articleId + ", likeordislike=" + likeordislike
+				+ ", userId=" + userId + ", lodTime=" + lodTime + "]";
+	}
+    
 }

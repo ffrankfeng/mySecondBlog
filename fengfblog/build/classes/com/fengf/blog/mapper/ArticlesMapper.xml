@@ -7,6 +7,7 @@
     <result column="uptime" property="uptime" jdbcType="VARCHAR" />
     <result column="reading" property="reading" jdbcType="INTEGER" />
     <result column="author" property="author" jdbcType="VARCHAR" />
+     <result column="author_id" property="authorId" jdbcType="INTEGER" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="likecount" property="likecount" jdbcType="INTEGER" />
     <result column="dislike" property="dislike" jdbcType="INTEGER" />
@@ -81,13 +82,16 @@
   </sql>
   <sql id="Base_Column_List" >
     article_id, title, uptime, reading, author, content, likecount, dislike, commentcontent, 
-    from_uid, to_uid, catalog, keyword1, keyword2, keyword3, isopen, top, tOPtime
+    from_uid, to_uid, catalog, keyword1, keyword2, keyword3, isopen, top, tOPtime,author_id
   </sql>
   <select id="articleCountByQueryVo" parameterType="ArticleQueryVo" resultType="Integer">
 		select count(1) from articles
 		<where>
 			<if test="title!=null and title!=''">
 				title like "%"#{title}"%"
+			</if>
+			<if test="authorId!=null and authorId!=''">
+				and author_id = #{authorId}
 			</if>
 			<if test="keyword1!=null and keyword1!=''">
 				and keyword1 like "%"#{keyword1}"%"
@@ -105,6 +109,9 @@
 		<where>
 			<if test="title!=null and title!=''">
 				title like "%"#{title}"%"
+			</if>
+			<if test="authorId!=null and authorId!=''">
+				and author_id = #{authorId}
 			</if>
 			<if test="keyword1!=null and keyword1!=''">
 				and keyword1 like "%"#{keyword1}"%"
@@ -156,14 +163,14 @@
       likecount, dislike, commentcontent, 
       from_uid, to_uid, catalog, 
       keyword1, keyword2, keyword3, 
-      isopen, top, tOPtime
+      isopen, top, tOPtime,author_id
       )
     values (#{articleId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{uptime,jdbcType=VARCHAR}, 
       #{reading,jdbcType=INTEGER}, #{author,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{likecount,jdbcType=INTEGER}, #{dislike,jdbcType=INTEGER}, #{commentcontent,jdbcType=VARCHAR}, 
       #{fromUid,jdbcType=VARCHAR}, #{toUid,jdbcType=VARCHAR}, #{catalog,jdbcType=VARCHAR}, 
       #{keyword1,jdbcType=VARCHAR}, #{keyword2,jdbcType=VARCHAR}, #{keyword3,jdbcType=VARCHAR}, 
-      #{isopen,jdbcType=VARCHAR}, #{top,jdbcType=VARCHAR}, #{toptime,jdbcType=VARCHAR}
+      #{isopen,jdbcType=VARCHAR}, #{top,jdbcType=VARCHAR}, #{toptime,jdbcType=VARCHAR},#{authorId,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.fengf.blog.pojo.Articles" >
@@ -223,6 +230,9 @@
       <if test="toptime != null" >
         tOPtime,
       </if>
+      <if test="authorId != null" >
+       author_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="articleId != null" >
@@ -278,6 +288,9 @@
       </if>
       <if test="toptime != null" >
         #{toptime,jdbcType=VARCHAR},
+      </if>
+       <if test="authorId != null" >
+        #{authorId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -427,6 +440,9 @@
       <if test="toptime != null" >
         tOPtime = #{toptime,jdbcType=VARCHAR},
       </if>
+      <if test="authorId != null" >
+        author_id = #{authorId,jdbcType=INTEGER},
+      </if>
     </set>
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
@@ -440,7 +456,6 @@
     set dislike = #{dislike,jdbcType=INTEGER}
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
-  
    <update id="addReadingByPrimaryKey" parameterType="java.lang.Integer" >
     update articles
     set reading = reading + 1
@@ -464,7 +479,8 @@
       keyword3 = #{keyword3,jdbcType=VARCHAR},
       isopen = #{isopen,jdbcType=VARCHAR},
       top = #{top,jdbcType=VARCHAR},
-      tOPtime = #{toptime,jdbcType=VARCHAR}
+      tOPtime = #{toptime,jdbcType=VARCHAR},
+      author_id = #{authorId,jdbcType=INTEGER},
     where article_id = #{articleId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -97,7 +97,60 @@
       order by ${orderByClause}
     </if>
   </select>
-  
+	<select id="userCountByQueryVo" parameterType="UserQueryVo" resultType="Integer">
+		select count(1) from users
+		<where>
+			<if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%"
+			</if>
+		</where>
+	</select>
+	<select id="attentionCountByQueryVo" parameterType="UserQueryVo" resultType="Integer">
+		 SELECT COUNT(1) FROM  users INNER JOIN attention ON users.user_id=attention.attuser_id 
+		 WHERE 
+		 <if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%" and
+		</if>
+		 attention.user_id =  #{userId}
+	</select>
+	<select id="selectAttentionListByQueryVo" parameterType="UserQueryVo" resultMap="BaseResultMap">
+		SELECT users.* FROM  users INNER JOIN attention ON users.user_id=attention.attuser_id 
+		WHERE 
+		<if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%" and
+		</if>
+		attention.user_id = #{userId}
+		order by articlecount desc
+		limit #{startRow},#{size}
+	</select>
+	<select id="fansCountByQueryVo" parameterType="UserQueryVo" resultType="Integer">
+		SELECT COUNT(1) FROM  users INNER JOIN attention ON attention.user_id=users.user_id
+		 WHERE
+			<if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%" and
+			</if>
+		 attention.attuser_id = #{userId}
+	</select>
+	<select id="selectFansListByQueryVo" parameterType="UserQueryVo" resultMap="BaseResultMap">
+		SELECT users.* FROM  users INNER JOIN attention ON attention.user_id=users.user_id
+		 WHERE
+			<if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%" and
+			</if>
+		attention.attuser_id = #{userId}
+		order by articlecount desc
+		limit #{startRow},#{size}
+	</select>
+  	<select id="selectUserListByQueryVo" parameterType="UserQueryVo" resultMap="BaseResultMap">
+		select * from users
+		<where>
+			<if test="userName!=null and userName!=''">
+				user_name like "%"#{userName}"%"
+			</if>
+		</where>
+		order by articlecount desc
+		limit #{startRow},#{size}
+	</select>
   <select id="selectByusername" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
@@ -164,6 +217,9 @@
       <if test="gold != null" >
         gold,
       </if>
+      <if test="joinday != null" >
+        joinday,
+      </if>
       <if test="attention != null" >
         attention,
       </if>
@@ -207,6 +263,9 @@
       </if>
       <if test="gold != null" >
         #{gold,jdbcType=INTEGER},
+      </if>
+      <if test="joinday != null" >
+        #{joinday,jdbcType=DATE},
       </if>
       <if test="attention != null" >
         #{attention,jdbcType=INTEGER},
@@ -261,7 +320,9 @@
       <if test="record.gold != null" >
         gold = #{record.gold,jdbcType=INTEGER},
       </if>
-      
+      <if test="record.joinday != null" >
+        joinday = #{record.joinday,jdbcType=DATE},
+      </if>
       <if test="record.attention != null" >
         attention = #{record.attention,jdbcType=INTEGER},
       </if>
@@ -293,6 +354,7 @@
       sex = #{record.sex,jdbcType=VARCHAR},
       profession = #{record.profession,jdbcType=VARCHAR},
       gold = #{record.gold,jdbcType=INTEGER},
+      joinday = #{record.joinday,jdbcType=DATE},
       attention = #{record.attention,jdbcType=INTEGER},
       fans = #{record.fans,jdbcType=INTEGER},
       moodcount = #{record.moodcount,jdbcType=INTEGER},
@@ -329,6 +391,9 @@
       <if test="gold != null" >
         gold = #{gold,jdbcType=INTEGER},
       </if>
+      <if test="joinday != null" >
+        joinday = #{joinday,jdbcType=DATE},
+      </if>
       <if test="attention != null" >
         attention = #{attention,jdbcType=INTEGER},
       </if>
@@ -347,10 +412,34 @@
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
-  
+   <update id="addUserMood" parameterType="java.lang.String" >
+    update users
+    set  moodcount = moodcount+1
+    where user_name = #{moodAuthor,jdbcType=VARCHAR}
+  </update>
     <update id="addUserArticleCount" parameterType="java.lang.Integer" >
     update users
     set  articlecount = articlecount+1
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="addUserAttentionByUserId" parameterType="java.lang.Integer" >
+    update users
+    set  attention = attention+1
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="deleteUserAttentionByUserId" parameterType="java.lang.Integer" >
+    update users
+    set  attention = attention-1
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="addUserFansByUserId" parameterType="java.lang.Integer" >
+    update users
+    set  fans = fans+1
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="deleteUserFansByUserId" parameterType="java.lang.Integer" >
+    update users
+    set  fans = fans-1
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.fengf.blog.pojo.Users" >
@@ -363,6 +452,7 @@
       sex = #{sex,jdbcType=VARCHAR},
       profession = #{profession,jdbcType=VARCHAR},
       gold = #{gold,jdbcType=INTEGER},
+      joinday = #{joinday,jdbcType=DATE},
       attention = #{attention,jdbcType=INTEGER},
       fans = #{fans,jdbcType=INTEGER},
       moodcount = #{moodcount,jdbcType=INTEGER},

@@ -3,6 +3,8 @@ package com.fengf.blog.pojo;
 public class Articles {
     private Integer articleId;
 
+    private Integer authorId;
+    
     private String title;
 
     private String uptime;
@@ -37,43 +39,36 @@ public class Articles {
 
     private String toptime;
 
-    @Override
-	public String toString() {
-		return "Articles [articleId=" + articleId + ", title=" + title + ", uptime=" + uptime + ", reading=" + reading
-				+ ", author=" + author + ", content=" + content + ", likecount=" + likecount + ", dislike=" + dislike
-				+ ", commentcontent=" + commentcontent + ", fromUid=" + fromUid + ", toUid=" + toUid + ", catalog="
-				+ catalog + ", keyword1=" + keyword1 + ", keyword2=" + keyword2 + ", keyword3=" + keyword3 + ", isopen="
-				+ isopen + ", top=" + top + ", toptime=" + toptime + "]";
-	}
-
+   
 	public Articles() {
 		super();
 		// TODO 自动生成的构造函数存根
 	}
 
-	public Articles(Integer articleId, String title, String uptime, Integer reading, String author, String content,
-			Integer likecount, Integer dislike, String commentcontent, String fromUid, String toUid, String catalog,
-			String keyword1, String keyword2, String keyword3, String isopen, String top, String toptime) {
-		super();
-		this.articleId = articleId;
-		this.title = title;
-		this.uptime = uptime;
-		this.reading = reading;
-		this.author = author;
-		this.content = content;
-		this.likecount = likecount;
-		this.dislike = dislike;
-		this.commentcontent = commentcontent;
-		this.fromUid = fromUid;
-		this.toUid = toUid;
-		this.catalog = catalog;
-		this.keyword1 = keyword1;
-		this.keyword2 = keyword2;
-		this.keyword3 = keyword3;
-		this.isopen = isopen;
-		this.top = top;
-		this.toptime = toptime;
+	
+
+	@Override
+	public String toString() {
+		return "Articles [articleId=" + articleId + ", authorId=" + authorId + ", title=" + title + ", uptime=" + uptime
+				+ ", reading=" + reading + ", author=" + author + ", content=" + content + ", likecount=" + likecount
+				+ ", dislike=" + dislike + ", commentcontent=" + commentcontent + ", fromUid=" + fromUid + ", toUid="
+				+ toUid + ", catalog=" + catalog + ", keyword1=" + keyword1 + ", keyword2=" + keyword2 + ", keyword3="
+				+ keyword3 + ", isopen=" + isopen + ", top=" + top + ", toptime=" + toptime + "]";
 	}
+
+
+
+	public Integer getAuthorId() {
+		return authorId;
+	}
+
+
+
+	public void setAuthorId(Integer authorId) {
+		this.authorId = authorId;
+	}
+
+
 
 	public Integer getArticleId() {
         return articleId;
