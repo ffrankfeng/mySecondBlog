@@ -3,6 +3,7 @@ package com.fengf.blog.service;
 import java.util.List;
 
 import com.fengf.blog.pojo.ArticleQueryVo;
+import com.fengf.blog.pojo.Articlecomment;
 import com.fengf.blog.pojo.Articlelike;
 import com.fengf.blog.pojo.Articles;
 import com.fengf.blog.pojo.Users;
@@ -25,5 +26,11 @@ public interface ArticleService {
 	Articlelike getUserLikeAndDisLike(Integer articleId, Integer userId);
 
 	boolean getIsAttention(Integer userId, String author);
+
+	List<Articlecomment> selectNewComment(Articlecomment articlecomment);
+
+	boolean insertcomment(Articlecomment articlecomment);
+
+	List<Articlecomment> getCommentList(Integer articleId);
 
 }

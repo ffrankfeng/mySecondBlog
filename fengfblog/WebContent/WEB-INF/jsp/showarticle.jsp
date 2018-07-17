@@ -63,7 +63,7 @@ function deleteAttention(authorId){
 		);
 	}
 }
-	function likeAndDislike(articleId,flag){
+function likeAndDislike(articleId,flag){
 		if(flag){
 			$.post(
 					"${pageContext.request.contextPath}/likeAndDislike",
@@ -95,6 +95,61 @@ function deleteAttention(authorId){
 		}
 		
 	}
+
+function articlecomment(articleId,author,authorId){
+	var commentContent = $("#commentContent").val();
+	var at=commentContent.indexOf("@");
+	var flag=commentContent.substring(0,at+1);
+	if(flag == '@' && at == 0 ){
+		var end=commentContent.indexOf(":");
+		var str=commentContent.substring(1,end);
+		var str2=commentContent.substring(end+1,commentContent.length);
+		alert(str2);
+		if($.trim(str2) == ''){
+				alert("评论内容不能为空");
+				return false;
+		}else{
+			alert("str2="+str2);
+			$.post(
+					"${pageContext.request.contextPath}/articlecomment",
+					{"articleId":articleId,"toUsername":str,"topicType":"reply","toUid":authorId,"commentContent":str2},
+					function(data){
+						var isFinish=data.isFinish;
+						if(isFinish == false){
+							alert("评论失败");
+						}else{
+							alert("评论成功");
+							location.reload();
+						}
+					},
+					"json"
+				);
+			}
+	}else{
+		 if(commentContent == ""){
+				alert("评论内容不能为空");
+				return false;
+			}
+			$.post(
+					"${pageContext.request.contextPath}/articlecomment",
+					{"articleId":articleId,"toUsername":author,"toUid":authorId,"commentContent":commentContent},
+					function(data){
+						var isFinish=data.isFinish;
+						if(isFinish == false){
+							alert("评论失败");
+						}else{
+							alert("评论成功");
+							location.reload();
+						}
+					},
+					"json"
+				);
+	}
+}
+function reply(fromUid,fromUsername){
+	document.getElementById('commentContent').value = "@"+fromUsername+": ";
+	document.getElementById('commentContent').focus();
+}
 </script>
 <body style="background-color: whitesmoke;">
 	<!--导航栏-->
@@ -177,42 +232,39 @@ function deleteAttention(authorId){
 					</c:if>
 								
 					<div class="col-lg-12 col-xs-12" style="margin-top: 4%;height: 80px;">
-						<textarea style="height: 100%;width: 100%;resize: none;">想对作者说点什么。。。
-						</textarea>
+						<form name="form" method="post" >
+							<div class="col-lg-10 col-xs-10" style="margin-bottom: 2%;">
+								<textarea style="height: 100%;width: 100%;resize: none; maxlength="100"  onchange="this.value=this.value.substring(0, 100)" onkeydown="this.value=this.value.substring(0, 100)" onkeyup="this.value=this.value.substring(0, 100)"  id="commentContent" name="commentContent" placeholder="想说点什么。。。"></textarea>
+							
+							</div>
+							<div class="col-lg-2 col-xs-2" >
+								<input type="button" class="btn btn-info" style="margin-left: 2%;margin-top: 6px;" value="发布" style="font-size: 80%;" onclick="articlecomment(${article.articleId},${article.author },${article.authorId })" />
+							</div>	
+							</form> 
+						
 					</div>
-					<div class="col-lg-12 col-xs-12" style="margin-top: 2%;margin-bottom: 2%;border-bottom: 1px solid #C5C5C5;">
-						<span style="margin-top: 2%;font-size: large;">
-						sbwharry
-						</span>
-						<span style="margin-top: 2%;margin-left: 4%;">
-						2018-06-25 16:58:03
-						</span><br />
-						<span style="margin-top: 2%;margin-left: 4%;">
-						感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。
-						</span>
-					</div>
-					<div class="col-lg-12 col-xs-12" style="margin-top: 2%;margin-bottom: 2%;border-bottom: 1px solid #C5C5C5;">
-						<span style="margin-top: 2%;font-size: large;">
-						sbwharry
-						</span>
-						<span style="margin-top: 2%;margin-left: 4%;">
-						2018-06-25 16:58:03
-						</span><br />
-						<span style="margin-top: 2%;margin-left: 4%;">
-						感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。
-						</span>
-					</div>
-					<div class="col-lg-12 col-xs-12" style="margin-top: 2%;margin-bottom: 2%;border-bottom: 1px solid #C5C5C5;">
-						<span style="margin-top: 2%;font-size: large;">
-						sbwharry
-						</span>
-						<span style="margin-top: 2%;margin-left: 4%;">
-						2018-06-25 16:58:03
-						</span><br />
-						<span style="margin-top: 2%;margin-left: 4%;">
-						感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。感谢博主。 1.测试那边给了我很好指导。 2.目前为止，最好的一篇。就是全0像素的空白矩阵，为何会归类到1。
-						</span>
-					</div>
+					<c:forEach items="${commentList }" var="comment">
+						<div class="col-lg-12 col-xs-12" style="margin-top: 2%;margin-bottom: 2%;border-bottom: 1px solid #C5C5C5;">
+							<span style="margin-top: 2%;font-size: large;">
+							${comment.fromUsername }
+							</span>
+							<span style="margin-top: 2%;margin-left: 4%;">
+							${comment.commentTime }
+							</span>
+							<a onclick="reply('${comment.fromUid}','${comment.fromUsername }')"><span style="margin-top: 2%;margin-left: 4%;">回复</span></a>
+							<br/>
+							<c:if test="${comment.topicType == 'reply'}">
+								<span style="margin-top: 2%;margin-left: 1%;">
+									@ ${comment.toUsername }: 
+								</span>
+							</c:if>
+							<span style="margin-top: 2%;margin-left: 1%;">
+							${comment.commentContent }
+							</span>
+							<div class="col-lg-12 col-xs-12" style="height: 10px"></div>
+						</div>		
+					</c:forEach>
+					<div class="col-lg-12 col-xs-12" style="height: 80px"></div>
 				</div>
 				<div class="col-lg-3 hidden-xs"style="margin-left: 15px; height: 800px;">
 					<div class="row">

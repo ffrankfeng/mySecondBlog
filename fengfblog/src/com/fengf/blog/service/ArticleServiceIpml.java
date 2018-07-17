@@ -8,11 +8,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fengf.blog.mapper.ArticlecommentMapper;
 import com.fengf.blog.mapper.ArticlelikeMapper;
 import com.fengf.blog.mapper.ArticlesMapper;
 import com.fengf.blog.mapper.AttentionMapper;
 import com.fengf.blog.mapper.UsersMapper;
 import com.fengf.blog.pojo.ArticleQueryVo;
+import com.fengf.blog.pojo.Articlecomment;
 import com.fengf.blog.pojo.Articlelike;
 import com.fengf.blog.pojo.Articles;
 import com.fengf.blog.pojo.Attention;
@@ -30,6 +32,8 @@ public class ArticleServiceIpml implements ArticleService {
 	private ArticlelikeMapper articlelikeMapper;
 	@Autowired
 	private AttentionMapper attentionMapper;
+	@Autowired
+	private ArticlecommentMapper articlecommentMapper;
 	
 	public String getupDate() throws ParseException{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
@@ -136,6 +140,28 @@ public class ArticleServiceIpml implements ArticleService {
 		System.out.println(attention);
 		if(attention == null) return false;
 		else return true;
+	}
+	@Override
+	public List<Articlecomment> selectNewComment(Articlecomment articlecomment) {
+		
+		return null;
+	}
+	@Override
+	public boolean insertcomment(Articlecomment articlecomment) {
+		
+		try {
+			articlecomment.setCommentTime(getupDate());
+		} catch (ParseException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		int flag = articlecommentMapper.insert(articlecomment);
+		if (flag>0) return true;
+		else return false;
+	}
+	@Override
+	public List<Articlecomment> getCommentList(Integer articleId) {
+		return articlecommentMapper.selectCommentByArticleId(articleId);
 	}
 	
 }
