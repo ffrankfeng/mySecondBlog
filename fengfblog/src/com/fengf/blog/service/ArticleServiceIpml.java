@@ -135,9 +135,9 @@ public class ArticleServiceIpml implements ArticleService {
 		Attention record = new Attention();
 		record.setUserId(userId);
 		record.setAttuserId(attentionAuthor.getUserId());
-		System.out.println(record);
+
 		Attention attention = attentionMapper.selectByAuthorIdAndUserId(record);
-		System.out.println(attention);
+
 		if(attention == null) return false;
 		else return true;
 	}
@@ -163,5 +163,8 @@ public class ArticleServiceIpml implements ArticleService {
 	public List<Articlecomment> getCommentList(Integer articleId) {
 		return articlecommentMapper.selectCommentByArticleId(articleId);
 	}
-	
+	@Override
+	public List<Articles> selecthotArticles() {
+		return articlesMapper.selectArticleListByUser(1);
+	}
 }

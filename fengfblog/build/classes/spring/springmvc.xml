@@ -19,22 +19,19 @@
 	<mvc:resources location="/fonts/" mapping="/fonts/**"/>
 	<mvc:resources location="/img/" mapping="/img/**"/> 
 	<mvc:resources location="/ueditor/" mapping="/ueditor/**"/>
-  	<!-- <mvc:interceptors>
-			多个拦截器
+	<mvc:interceptors>
+			<!-- 多个拦截器 -->
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
-				自定义的拦截器类
-			<bean class="com.fengf.wms.interceptor.LoginInterceptor"/>
-			
+				<!-- 自定义的拦截器类 -->
+			<bean class="com.fengf.blog.interceptor.LoginInterceptor"/>
 		</mvc:interceptor>
-		<mvc:interceptor>
-			<mvc:mapping path="/user/newUser"/>
-				自定义的拦截器类
-			<bean class="com.fengf.wms.interceptor.UserAutInterceptor"/>
-		</mvc:interceptor>
-	</mvc:interceptors> -->
+	</mvc:interceptors>
+  	
 	<!-- 配置视图解析器 -->
-	    <!-- 支持文件上传 -->
+
+	
+	<!-- 支持文件上传 -->
     <bean id="multipartResolver" class="com.baidu.ueditor.CommonsMultiparResolver"/>
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

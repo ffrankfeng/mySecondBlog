@@ -1,6 +1,5 @@
 package com.fengf.blog.pojo;
 
-import java.util.Date;
 
 public class Users {
     private Integer userId;
@@ -152,4 +151,12 @@ public class Users {
     public void setIntroduction(String introduction) {
         this.introduction = introduction == null ? null : introduction.trim();
     }
+	public String toString() {
+		return "Users [userId=" + userId + ", userName=" + userName + ", userPassword=" + userPassword + ", email="
+				+ email + ", phone=" + phone + ", birthday=" + birthday + ", sex=" + sex + ", profession=" + profession
+				+ ", gold=" + gold + ", joinday=" + joinday + ", attention=" + attention + ", fans=" + fans
+				+ ", moodcount=" + moodcount + ", articlecount=" + articlecount + ", introduction=" + introduction
+				+ "]";
+	}
+    
 }

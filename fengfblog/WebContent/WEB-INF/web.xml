@@ -19,7 +19,11 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	<!-- tiles监听器，默认配置文件在/WEB-INF/tiles*.xml-->
+     <!-- <listener>
+         <listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
+     </listener> -->
+     
 	<!-- 配置过滤器，解决post的乱码问题 -->
 	<filter>
 		<filter-name>encoding</filter-name>	

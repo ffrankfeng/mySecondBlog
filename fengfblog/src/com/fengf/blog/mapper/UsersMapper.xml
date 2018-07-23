@@ -391,9 +391,6 @@
       <if test="gold != null" >
         gold = #{gold,jdbcType=INTEGER},
       </if>
-      <if test="joinday != null" >
-        joinday = #{joinday,jdbcType=DATE},
-      </if>
       <if test="attention != null" >
         attention = #{attention,jdbcType=INTEGER},
       </if>
@@ -452,7 +449,6 @@
       sex = #{sex,jdbcType=VARCHAR},
       profession = #{profession,jdbcType=VARCHAR},
       gold = #{gold,jdbcType=INTEGER},
-      joinday = #{joinday,jdbcType=DATE},
       attention = #{attention,jdbcType=INTEGER},
       fans = #{fans,jdbcType=INTEGER},
       moodcount = #{moodcount,jdbcType=INTEGER},

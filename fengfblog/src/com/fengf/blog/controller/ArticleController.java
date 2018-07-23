@@ -34,7 +34,6 @@ public class ArticleController {
 	@RequestMapping(value="/articlecomment")
 	public void articlecomment(Articlecomment articlecomment,Model model,HttpServletRequest request,HttpServletResponse response) throws IOException{
 		Users current_user = (Users) request.getSession().getAttribute("current_user");
-		System.out.println(articlecomment);
 		articlecomment.setFromUid(current_user.getUserId());
 		articlecomment.setFromUsername(current_user.getUserName());
 		boolean flag = articleService.insertcomment(articlecomment);
@@ -43,11 +42,17 @@ public class ArticleController {
 	//首页
 	@RequestMapping(value="/index")
 	public String index(ArticleQueryVo vo,Model model){
-		List<Users> hotUsers=articleService.selectHotUsers();
-		model.addAttribute("hotUsers", hotUsers);
 		Page<Articles>  page = articleService.selectAllPage(vo);
 		model.addAttribute("page", page);
 		return "index";
+	}
+	@RequestMapping(value="/InfoBar")
+	public String InfoBar(Model model){
+		List<Users> hotUsers=articleService.selectHotUsers();
+		model.addAttribute("hotUsers", hotUsers);
+		List<Articles> hotArticles=articleService.selecthotArticles();
+		model.addAttribute("hotArticles", hotArticles);
+		return "InfoBar";
 	}
 	@RequestMapping(value="/userarticlelist")
 	String userarticlelist(ArticleQueryVo vo,Integer userId,Model model){
@@ -56,7 +61,6 @@ public class ArticleController {
 			model.addAttribute("search",userId);
 		}
 		Page<Articles>  page = articleService.selectAllPage(vo);
-		System.out.println(page);
 		model.addAttribute("page", page);
 		return "userarticlelist";
 	}
@@ -75,7 +79,6 @@ public class ArticleController {
 		Articlelike articlelike =articleService.getUserLikeAndDisLike(articleId,current_user.getUserId());
 		boolean isAttention = articleService.getIsAttention(current_user.getUserId(),articles.getAuthor());
 		List<Articlecomment> commentList = articleService.getCommentList(articleId);
-		System.out.println(commentList);
 		model.addAttribute("commentList", commentList);
 		model.addAttribute("isAttention", isAttention);
 		model.addAttribute("articlelike", articlelike);
@@ -88,9 +91,7 @@ public class ArticleController {
 		Users current_user = (Users) request.getSession().getAttribute("current_user");
 		articles.setAuthorId(current_user.getUserId());
 		articles.setAuthor(current_user.getUserName());
-		System.out.println("my article= "+articles);
 		boolean flag=articleService.savewriting(articles);
-		System.out.println("my article= "+flag);
 		response.getWriter().write("{\"isFinish\":"+flag+"}");
 	}
 	

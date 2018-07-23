@@ -4,6 +4,7 @@ import com.fengf.blog.pojo.ArticleQueryVo;
 import com.fengf.blog.pojo.Articles;
 import com.fengf.blog.pojo.ArticlesExample;
 import com.fengf.blog.pojo.UserQueryVo;
+import com.fengf.blog.pojo.Users;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -40,5 +41,7 @@ public interface ArticlesMapper {
 	List<Articles> selectArticleListByQueryVo(ArticleQueryVo articleVo);
 
 	void addReadingByPrimaryKey(Integer articleId);
+
+	List<Articles> selectArticleListByUser(int i);
 
 }

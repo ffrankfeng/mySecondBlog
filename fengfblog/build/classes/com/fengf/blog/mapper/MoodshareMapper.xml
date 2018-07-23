@@ -294,14 +294,7 @@
 		</select>
 	  <select id="selectMoodListByQueryVo" parameterType="MoodShareQueryVo" resultMap="BaseResultMap">
 
-<!-- 			<where>
-				<if test="moodAuthor!=null and moodAuthor!=''">
-					mood_author = #{moodAuthor}
-				</if>
-				<if test="moodDate!=null and moodDate!=''">
-					and mood_date = #{moodDate}
-				</if>
-			</where> -->
+
 			SELECT m.mood_id,m.mood_content,m.mood_pic,m.mood_author,m.mood_date,m.mood_like,m.mood_dislike,
 				(CASE m.mood_likeuserid LIKE "${moodLikeUserId}"
       			 WHEN 1 THEN 'true'
@@ -309,6 +302,14 @@
       			 END
       		)mood_likeuserid
    			FROM moodshare m
+   			<where>
+				<if test="moodAuthor!=null and moodAuthor!=''">
+					mood_author = #{moodAuthor}
+				</if>
+<!-- 				<if test="moodDate!=null and moodDate!=''">
+					and mood_date = #{moodDate}
+				</if> -->
+			</where>
 			order by mood_date DESC
 			limit #{startRow},#{size}
 		</select>

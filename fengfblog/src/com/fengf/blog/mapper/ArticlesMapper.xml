@@ -104,6 +104,12 @@
 			</if>	
 		</where>
 	</select>
+	
+	<select id="selectArticleListByUser" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select * from articles where author_id = #{i}
+		order by article_id DESC
+		limit 0,5
+	</select>
   	<select id="selectArticleListByQueryVo" parameterType="ArticleQueryVo" resultMap="BaseResultMap">
 		select * from articles
 		<where>

@@ -33,4 +33,6 @@ public interface ArticleService {
 
 	List<Articlecomment> getCommentList(Integer articleId);
 
+	List<Articles> selecthotArticles();
+
 }

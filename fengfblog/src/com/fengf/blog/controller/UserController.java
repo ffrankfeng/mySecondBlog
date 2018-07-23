@@ -31,10 +31,18 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	
 	//注册页面
 	@RequestMapping(value="/register",method = RequestMethod.GET)
 	public String register(){
 		return "register";
+	}
+	
+	@RequestMapping(value="/ProfileBar")
+	public String ProfileBar(){
+		
+		return "ProfileBar";
 	}
 	@RequestMapping(value="/hotuser")
 	public String hotuser(UserQueryVo vo,Model model){
@@ -88,7 +96,18 @@ public class UserController {
 		model.addAttribute("page", page);
 		return "myinformation";	
 	}
-	
+	//我的文章
+	@RequestMapping(value="/myarticles")
+	public String myarticles(ArticleQueryVo vo,Model model,HttpServletRequest request,HttpServletResponse response) throws ParseException{
+		Users current_user = (Users) request.getSession().getAttribute("current_user");
+		Users user = userService.personcenter(current_user.getUserId());
+		HttpSession session = request.getSession();
+		session.setAttribute("current_user", user);
+		vo.setAuthorId(current_user.getUserId());
+		Page<Articles>  page = userService.selectUserAllPage(vo);
+		model.addAttribute("page", page);
+		return "myarticles";	
+	}
 	@RequestMapping(value="/personcenter")
 	public String personcenter(ArticleQueryVo vo,Integer userId,Model model,HttpServletRequest request,HttpServletResponse response) throws ParseException{
 		Users user = userService.personcenter(userId);
@@ -182,7 +201,7 @@ public class UserController {
 	@RequestMapping(value="/userLogin",method = RequestMethod.POST)
 	public String userLogin(Users user,Model model,HttpServletRequest request){
 		Users current_user=userService.userLogin(user);
-		
+	
 		if(current_user ==null){
 			model.addAttribute("loginInfo", "密码不正确");
 			return "login";

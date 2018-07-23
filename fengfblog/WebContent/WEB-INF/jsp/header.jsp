@@ -51,7 +51,7 @@
 			
 							<c:if test="${!empty current_user }">
 							<a href="myinformation"><img src="<%=basePath%>img/person.png" style="width: 20px;height: 20px;" /></a>
-							<a href="${pageContext.request.contextPath }/userQuit">退出</a>
+							<a href="${pageContext.request.contextPath }/userQuit" style="margin-left: 2px">退出</a>
 							</c:if>
 						</div>
 						<form class="navbar-form navbar-right visible-lg" method="post" action="${pageContext.request.contextPath }/userarticlelist" role="search">

@@ -28,6 +28,9 @@
 <script src="<%=basePath%>js/jquery-1.11.3.min.js"></script>
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
+<style type="text/css">
+	img[src=""],img:not([src]){opacity:0;}
+</style>
 </head>
 <script type="text/javascript">
 function changeImg(obj){
@@ -157,13 +160,130 @@ function submitform(){
 	return blog;
 };
 </script>
-<body style="background-image:url(<%=basePath%>img/background1.png);height: 750px;">
+<body style="background-color: rgb(240,242,245);min-height: 750px;">
+<script>
+    ! function() {
+        //封装方法，压缩之后减少文件大小
+        function get_attribute(node, attr, default_value) {
+            return node.getAttribute(attr) || default_value;
+        }
+        //封装方法，压缩之后减少文件大小
+        function get_by_tagname(name) {
+            return document.getElementsByTagName(name);
+        }
+        //获取配置参数
+        function get_config_option() {
+            var scripts = get_by_tagname("script"),
+                script_len = scripts.length,
+                script = scripts[script_len - 1]; //当前加载的script
+            return {
+                l: script_len, //长度，用于生成id用
+                z: get_attribute(script, "zIndex", -1), //z-index
+                o: get_attribute(script, "opacity", 0.5), //opacity
+                c: get_attribute(script, "color", "0,0,0"), //color
+                n: get_attribute(script, "count", 99) //count
+            };
+        }
+        //设置canvas的高宽
+        function set_canvas_size() {
+            canvas_width = the_canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                canvas_height = the_canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        }
+
+        //绘制过程
+        function draw_canvas() {
+            context.clearRect(0, 0, canvas_width, canvas_height);
+            //随机的线条和当前位置联合数组
+            var e, i, d, x_dist, y_dist, dist; //临时节点
+            //遍历处理每一个点
+            random_points.forEach(function(r, idx) {
+                r.x += r.xa,
+                    r.y += r.ya, //移动
+                    r.xa *= r.x > canvas_width || r.x < 0 ? -1 : 1,
+                    r.ya *= r.y > canvas_height || r.y < 0 ? -1 : 1, //碰到边界，反向反弹
+                    context.fillRect(r.x - 0.5, r.y - 0.5, 1, 1); //绘制一个宽高为1的点
+                //从下一个点开始
+                for (i = idx + 1; i < all_array.length; i++) {
+                    e = all_array[i];
+                    // 当前点存在
+                    if (null !== e.x && null !== e.y) {
+                    	
+                        x_dist = r.x - e.x; //x轴距离 l
+                        y_dist = r.y - e.y; //y轴距离 n
+                        dist = x_dist * x_dist + y_dist * y_dist; //总距离, m
+
+                        dist < e.max && (e === current_point && dist >= e.max / 2 && (r.x -= 0.03 * x_dist, r.y -= 0.03 * y_dist), //靠近的时候加速
+                            d = (e.max - dist) / e.max,
+                            context.beginPath(),
+                            context.lineWidth = d / 2,
+                            context.strokeStyle = "rgba(" + config.c + "," + (d + 0.2) + ")",
+                            context.moveTo(r.x, r.y),
+                            context.lineTo(e.x, e.y),
+                            context.stroke());
+                    
+                    }
+                }
+            }), frame_func(draw_canvas);
+        }
+        //创建画布，并添加到body中
+        var the_canvas = document.createElement("canvas"), //画布
+            config = get_config_option(), //配置
+            canvas_id = "c_n" + config.l, //canvas id
+            context = the_canvas.getContext("2d"), canvas_width, canvas_height,
+            frame_func = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(func) {
+                window.setTimeout(func, 1000 / 45);
+            }, random = Math.random,
+            current_point = {
+                x: null, //当前鼠标x
+                y: null, //当前鼠标y
+                max: 20000 // 圈半径的平方
+            },
+            all_array;
+        the_canvas.id = canvas_id;
+        the_canvas.style.cssText = "position:fixed;top:0;left:0;z-index:" + config.z + ";opacity:" + config.o;
+        get_by_tagname("body")[0].appendChild(the_canvas);
+
+        //初始化画布大小
+        set_canvas_size();
+        window.onresize = set_canvas_size;
+        //当时鼠标位置存储，离开的时候，释放当前位置信息
+        window.onmousemove = function(e) {
+            e = e || window.event;
+            current_point.x = e.clientX;
+            current_point.y = e.clientY;
+        }, window.onmouseout = function() {
+            current_point.x = null;
+            current_point.y = null;
+        };
+        //随机生成config.n条线位置信息
+        for (var random_points = [], i = 0; config.n > i; i++) {
+            var x = random() * canvas_width, //随机位置
+                y = random() * canvas_height,
+                xa = 2 * random() - 1, //随机运动方向
+                ya = 2 * random() - 1;
+            // 随机点
+            random_points.push({
+                x: x,
+                y: y,
+                xa: xa,
+                ya: ya,
+                max: 6000 //沾附距离
+            });
+        }
+        all_array = random_points.concat([current_point]);
+        //0.1秒后绘制
+        setTimeout(function() {
+            draw_canvas();
+        }, 100);
+    }();
+
+</script>
 	<!--导航栏-->
 	<jsp:include page="header.jsp"></jsp:include>
 	<div class="container" style="margin-top:2%;">
 			<div class="row" style="margin-top: 1%;" >
 				<div class="col-lg-1"></div>
-				<div class="col-lg-10 col-xs-12"align="center"style="border-radius:10px;background-color: rgba(255,250,240,0.8);text-align: center;font-size: 200%;">
+				<div class="col-lg-10 col-xs-12"align="center"style="border-radius:10px;background-color: rgba(250,250,250,0.7);text-align: center;font-size: 200%;">
 					<div class="row" style="margin-top: 2%;vertical-align: middle;align-items: center;">
 						<img src="<%=basePath%>img/sign_up.png" style="width: 30px;height: 30px;"/>
 						<font style="font-weight: bold;">欢迎注册</font>
@@ -183,7 +303,7 @@ function submitform(){
 							 	
 								 	<div class="col-lg-3 col-xs-2" style="text-align: left; ">
 								 		<!--<span style="font-size: small;" id="usernameConfirm">用户已存在</span>-->
-								 		<img src="" id="usernameConfirm" style="width: 20px;height: 20px;margin-top: 10%;" />
+								 		<img  id="usernameConfirm" style="width: 20px;height: 20px;margin-top: 10%;" />
 								 	</div>
 							 	</div>
 							 	<div class="row">
@@ -195,7 +315,7 @@ function submitform(){
 								 	</div>
 								 	<div class="col-lg-3 col-xs-2" style="text-align: left;">
 								 		<!--<span style="font-size: initial;" >密码不合法</span>-->
-								 		<img src="" id="passwordConfirm" style="width: 20px;height: 20px;margin-top: 10%;" />
+								 		<img id="passwordConfirm" style="width: 20px;height: 20px;margin-top: 10%;" />
 								 	</div>
 							 	</div>
 							 	<div class="row">
@@ -262,13 +382,13 @@ function submitform(){
 								 	</div>
 							 	</div>
 							 	<div class="row">
-							 		<div class="col-lg-6 col-xs-8" >
+							 		<div class="col-lg-3 col-xs-4" >
 									 	<div class="form-group input-group" style="float: left;">
-									 		<span class="input-group-addon">验&ensp;证&ensp;码</span>
-			           						<input type="text" class="form-control" placeholder="请输入验证码" id="verificationCode" name="verificationCode">
+									 		
+			           						<input type="text" class="form-control" placeholder="输入验证码" id="verificationCode" name="verificationCode">
 									 	</div>
 									</div>
-								 	<div class="col-lg-3 col-xs-2" >
+								 	<div class="col-lg-3 col-xs-4" >
 								 		<img onclick="changeImg(this)" src="${pageContext.request.contextPath}/checkcode">
 								 	</div>
 								 	<div class="col-lg-3 col-xs-2" style="text-align: left;">

@@ -29,115 +29,133 @@
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
 <script type="text/javascript">
-/* 	function likeUserMood(moodId){
-		
-			$.post(
-					"${pageContext.request.contextPath}/likeMood",
-					{"moodId":moodId},
-					function(data){
-						var isFinish=data.isFinish;
-						
-						if(isFinish == true){
-							location.reload();
-						}else{
-							alert("操作失败！");
-						}
-					},
-					"json"
-			);
-	} */
+$(document).ready(function(){
+    $('#InfoBar').load('InfoBar');
+})
 </script>
 </head>
-<body style="background-image:url(<%=basePath%>img/background1.png);">
+<body style="background-color: rgb(240,242,245);">
+<script>
+    ! function() {
+        //封装方法，压缩之后减少文件大小
+        function get_attribute(node, attr, default_value) {
+            return node.getAttribute(attr) || default_value;
+        }
+        //封装方法，压缩之后减少文件大小
+        function get_by_tagname(name) {
+            return document.getElementsByTagName(name);
+        }
+        //获取配置参数
+        function get_config_option() {
+            var scripts = get_by_tagname("script"),
+                script_len = scripts.length,
+                script = scripts[script_len - 1]; //当前加载的script
+            return {
+                l: script_len, //长度，用于生成id用
+                z: get_attribute(script, "zIndex", -1), //z-index
+                o: get_attribute(script, "opacity", 0.5), //opacity
+                c: get_attribute(script, "color", "0,0,0"), //color
+                n: get_attribute(script, "count", 99) //count
+            };
+        }
+        //设置canvas的高宽
+        function set_canvas_size() {
+            canvas_width = the_canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+                canvas_height = the_canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        }
+
+        //绘制过程
+        function draw_canvas() {
+            context.clearRect(0, 0, canvas_width, canvas_height);
+            //随机的线条和当前位置联合数组
+            var e, i, d, x_dist, y_dist, dist; //临时节点
+            //遍历处理每一个点
+            random_points.forEach(function(r, idx) {
+                r.x += r.xa,
+                    r.y += r.ya, //移动
+                    r.xa *= r.x > canvas_width || r.x < 0 ? -1 : 1,
+                    r.ya *= r.y > canvas_height || r.y < 0 ? -1 : 1, //碰到边界，反向反弹
+                    context.fillRect(r.x - 0.5, r.y - 0.5, 1, 1); //绘制一个宽高为1的点
+                //从下一个点开始
+                for (i = idx + 1; i < all_array.length; i++) {
+                    e = all_array[i];
+                    // 当前点存在
+                    if (null !== e.x && null !== e.y) {
+                    	
+                        x_dist = r.x - e.x; //x轴距离 l
+                        y_dist = r.y - e.y; //y轴距离 n
+                        dist = x_dist * x_dist + y_dist * y_dist; //总距离, m
+
+                        dist < e.max && (e === current_point && dist >= e.max / 2 && (r.x -= 0.03 * x_dist, r.y -= 0.03 * y_dist), //靠近的时候加速
+                            d = (e.max - dist) / e.max,
+                            context.beginPath(),
+                            context.lineWidth = d / 2,
+                            context.strokeStyle = "rgba(" + config.c + "," + (d + 0.2) + ")",
+                            context.moveTo(r.x, r.y),
+                            context.lineTo(e.x, e.y),
+                            context.stroke());
+                    
+                    }
+                }
+            }), frame_func(draw_canvas);
+        }
+        //创建画布，并添加到body中
+        var the_canvas = document.createElement("canvas"), //画布
+            config = get_config_option(), //配置
+            canvas_id = "c_n" + config.l, //canvas id
+            context = the_canvas.getContext("2d"), canvas_width, canvas_height,
+            frame_func = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(func) {
+                window.setTimeout(func, 1000 / 45);
+            }, random = Math.random,
+            current_point = {
+                x: null, //当前鼠标x
+                y: null, //当前鼠标y
+                max: 20000 // 圈半径的平方
+            },
+            all_array;
+        the_canvas.id = canvas_id;
+        the_canvas.style.cssText = "position:fixed;top:0;left:0;z-index:" + config.z + ";opacity:" + config.o;
+        get_by_tagname("body")[0].appendChild(the_canvas);
+
+        //初始化画布大小
+        set_canvas_size();
+        window.onresize = set_canvas_size;
+        //当时鼠标位置存储，离开的时候，释放当前位置信息
+        window.onmousemove = function(e) {
+            e = e || window.event;
+            current_point.x = e.clientX;
+            current_point.y = e.clientY;
+        }, window.onmouseout = function() {
+            current_point.x = null;
+            current_point.y = null;
+        };
+        //随机生成config.n条线位置信息
+        for (var random_points = [], i = 0; config.n > i; i++) {
+            var x = random() * canvas_width, //随机位置
+                y = random() * canvas_height,
+                xa = 2 * random() - 1, //随机运动方向
+                ya = 2 * random() - 1;
+            // 随机点
+            random_points.push({
+                x: x,
+                y: y,
+                xa: xa,
+                ya: ya,
+                max: 6000 //沾附距离
+            });
+        }
+        all_array = random_points.concat([current_point]);
+        //0.1秒后绘制
+        setTimeout(function() {
+            draw_canvas();
+        }, 100);
+    }();
+
+</script>
 	<!--导航栏-->
 	<jsp:include page="header.jsp"></jsp:include>
-	<div class="container"style="margin-top:2%;">
+		<div class="container"style="margin-top:2%;">
 			<div class="row" style="min-height: 600px;">
-				<div class="col-lg-3 hidden-xs"style="margin-right: 45px;height: 800px;border-bottom: 1px solid #C5C5C5;background-color: white;">
-					<div class="row" style=" ">
-						<div class="col-lg-6 col-xs-6" style="border-radius:0 40px 40px 0;background-color: #FFFFCC;vertical-align: middle;margin-top: 2px;margin-left: 2px;height: 30px;border-bottom: 1px solid #C5C5C5;">
-							<img src="<%=basePath%>img/expert.png" style="width: 20px;height: 21px;"/>&nbsp;
-							<font size="4">我的资料</font>
-						</div>
-						
-						<div class="col-lg-12 col-xs-12" style="vertical-align: middle;border-top: 1px solid #C5C5C5;">
-						
-							<img src="<%=basePath%>img/person.png" style="margin-top: 2%;margin-left: 2%;width: 60px;height: 60px;background-color: red;border-radius:50px ;"/>&nbsp;
-						
-						
-							<font size="2" style="font-weight: bold;">${current_user.userName }</font>
-							<a data-toggle="modal" data-target="#editDialog" onclick="edituser()"> <span style="float: right;margin-top: 2px;margin-right: 4px;">修改</span></a>
-							
-							<img src="<%=basePath%>img/file_edit48.png" style="margin-top: 4px;float: right;width: 15px;height: 15px;"/>
-							
-						</div>
-						<div class="col-lg-1 col-xs-1" style="margin-top: 3%;"></div>
-						<div class="col-lg-10 col-xs-10" style="margin-top: 3%;">
-							<table style="margin-top: 2%;font-weight: 560;">
-										<tr>
-											<td>性别:</td>
-											<td><span>${current_user.sex }</span></td>
-											
-										</tr>
-										<tr>
-											<td>生日：</td>	
-											<td><span>${current_user.birthday }</span></td>		
-										</tr>
-										<tr>
-											<td>行业：</td>
-											<td><span>${current_user.profession }</span></td>
-										</tr>
-										<tr>
-											<td>金币：</td>
-											<td><span>${current_user.gold }</span></td>
-										</tr>
-										</table>
-						</div>
-						<div class="col-lg-12 col-xs-12"style="margin-top: 2%;margin-bottom: 2%;margin-left: 4%;">
-							<span style="font-size: small; color: #808080;">${current_user.introduction }</span>
-						</div>
-											
-						<div class="col-lg-12 col-xs-12" style="margin-top: 4%; height: 70px;background-color: white;border-top: 1px solid #C5C5C5;border-bottom: 1px solid #C5C5C5;">
-									<table class="col-lg-12 col-xs-12" style="margin-top: 2%;text-align: center;">
-										<tr >
-											<td>关注</td>
-											<td>粉丝</td>
-											<td>心情</td>
-											<td>文章</td>
-										</tr>
-										<tr>
-												<td><span>${current_user.attention }</span></td>
-												<td><span>${current_user.fans }</span></td>
-												<td><span>${current_user.moodcount }</span></td>
-												<td><span>${current_user.articlecount }</span></td>
-											</tr>
-										</table>
-										
-						</div>
-					</div>
-				
-					
-					<div class="row">
-						<div class="col-lg-6 col-xs-6" style="background-color: #FFFFCC;margin-top: 2px;height: 30px;border-radius: 0 40px 40px 0;border-bottom: 1px solid #C5C5C5;">
-							<img src="<%=basePath%>img/content.png" style="width: 24px;height: 24px;"/>
-							<font size="4" style="text-align: center;">联系我</font>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12 col-xs-12" style="background-color: white;margin-top: 2px;border-top: 1px solid #C5C5C5;">
-							<div class="row" >
-								<div class="col-lg-12 col-xs-12" style="background-color: white;border-bottom: 1px solid #C5C5C5;margin-top: 2px;margin-bottom: 2px;">
-									<img src="<%=basePath%>img/email.png" style="width: 33px;height: 33px;"/>
-									<span id="distri" style="font-size:  initial;"> 95111539@qq.com</span><br/>
-									<img src="<%=basePath%>img/phone.png" style="width: 33px;height: 33px;"/>
-									<span id="distri" style="font-size: initial;"> 15366363203</span><br/>
-									<img src="<%=basePath%>img/qq.png" style="width: 33px;height: 33px;"/>
-									<span id="distri" style="font-size: initial;"> 951115439</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 				<div class="col-lg-8 col-xs-12" style="background-color: white;">
 					<div class="row" style="border-bottom: 1px solid #C5C5C5;">
 						<div class="col-lg-4 col-xs-4" style="background-color:#FFFFCC;border-radius:0 40px 40px 0;vertical-align: middle;">
@@ -145,11 +163,9 @@
 							<font style="font-weight:bold;font-size:400;">
 								HOT
 							</font>
-							
 						</div>
 					</div>
 					<br />
-					
 				<div class="row" style="background-color:white;height: 145px;">
 					<div class="col-lg-12 col-xs-12" style="border-bottom: 1px solid #C5C5C5;" align="center">
 						<form   method="post" action="${pageContext.request.contextPath }/hotuser" class="form-inline"  id="searchform" >
@@ -165,7 +181,7 @@
 						<a href="personcenter?userId=${hotuser.userId}">
 							<div class="col-lg-12 col-xs-12" style="">
 								<div class="col-lg-12 col-xs-12" style="margin-bottom: 2%;margin-top: 2%;">
-									<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;border-radius:25px;background-color: yellow;"/>&nbsp;
+									<img src="<%=basePath%>img/person.png" style="width: 50px;height: 50px;border-radius:25px;background-color: #FFFFCC;"/>&nbsp;
 										<font style="margin-top: 1%;font-size: large;">${hotuser.userName }</font>&emsp;
 										<font style="margin-top: 1%;font-size: small;">${hotuser.introduction }</font>
 								</div>
@@ -191,86 +207,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!-- 编辑对话框 -->
-		<div class="modal" id="editDialog" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title" id="myModalLabel">修改信息</h4>
-					</div>
-					<div class="modal-body">
-						<form class="form-horizontal" id="edit_customer_form" action="personEdit" method="post">
-							<input type="hidden" id="edit_cust_id" name="cust_id"/>
-							<div class="form-group">
-								<label for="edit_userName" class="col-sm-2 control-label">用户名</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="edit_userName" value="${current_user.userName }" name="userName">
-								</div>
-							</div>	
-							
-							<div class="form-group">
-								<label for="edit_email" class="col-sm-2 control-label">email</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="edit_email" value="${current_user.email }" name="email">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit_phone" class="col-sm-2 control-label">联系方式</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="edit_phone" value="${current_user.phone }" name="phone">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit_birthday" class="col-sm-2 control-label">生日</label>
-								<div class="col-sm-10">
-									<input type="date" class="form-control" id="edit_birthday" value="${current_user.birthday }" name="birthday">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit_sex" class="col-sm-2 control-label">性别</label>
-								<div class="col-sm-10">
-									
-				                     <c:if test="${current_user.sex=='male'}">
-				                    	<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="male" checked="checked">男
-				                   		<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="female">女
-				                     </c:if>
-				                    <c:if test="${current_user.sex=='female'}">
-				                    	<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="male" >男
-				                   		<input type="radio" class="btn btn-success btn-sm" name="sex" id="sex" value="female" checked="checked">女
-				                     </c:if>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit_profession" class="col-sm-2 control-label">行业</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="edit_profession" value="${current_user.profession }" name="profession">
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="edit_introduction" class="col-sm-2 control-label">个人简介</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="edit_introduction" value="${current_user.introduction }" name="introduction">
-								</div>
-							</div>
-							<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="submit" class="btn btn-primary" onclick="updateCustomer()">保存修改</button>
-					</div>
-						</form>
-					</div>
-					
+				<div class="col-lg-3 hidden-xs"style="margin-left: 15px; height: 800px;" id="InfoBar">
 				</div>
 			</div>
 		</div>
-	</body>
-	<script type="text/javascript">
-		document.getElementById('edit_birthday').valueAsDate=document.getElementById('birthday').value;
-</script>
 	</body>
 </html>
