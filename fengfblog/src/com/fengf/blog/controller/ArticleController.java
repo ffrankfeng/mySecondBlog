@@ -76,12 +76,18 @@ public class ArticleController {
 		Articles articles = articleService.showarticle(articleId);
 		Users author=articleService.getArticleAuthor(articles.getAuthor());
 		Users current_user = (Users) request.getSession().getAttribute("current_user");
-		Articlelike articlelike =articleService.getUserLikeAndDisLike(articleId,current_user.getUserId());
-		boolean isAttention = articleService.getIsAttention(current_user.getUserId(),articles.getAuthor());
+		if(current_user != null){
+			Articlelike articlelike =articleService.getUserLikeAndDisLike(articleId,current_user.getUserId());
+			boolean isAttention = articleService.getIsAttention(current_user.getUserId(),articles.getAuthor());
+			model.addAttribute("isAttention", isAttention);
+			model.addAttribute("articlelike", articlelike);
+		}else{
+			model.addAttribute("isAttention", false);
+			model.addAttribute("articlelike", null);
+		}
+
 		List<Articlecomment> commentList = articleService.getCommentList(articleId);
 		model.addAttribute("commentList", commentList);
-		model.addAttribute("isAttention", isAttention);
-		model.addAttribute("articlelike", articlelike);
 		model.addAttribute("article", articles);
 		model.addAttribute("articleAuthor", author);
 		return "showarticle";

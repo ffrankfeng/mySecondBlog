@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -54,7 +54,6 @@
 			
 		</div>
 	</div>
-	
 	<div class="row" style="margin-top: 4px;margin-bottom: 4px;">
 			<img src="<%=basePath%>img/background1.png" style="width: auto;height: 155px;"/>
 	</div>
@@ -68,9 +67,12 @@
 		<div class="col-lg-12" style="background-color: white;margin-top: 2px;">
 			<div class="row" >
 				<c:forEach items="${hotArticles }" var="hotArticle">
-					<div class="col-lg-12" style="background-color: white;height:60px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;border-bottom: 1px solid #C5C5C5;width:280px">
-						<a href="showarticle?articleId=${hotArticle.articleId }"><span id="title" style="font-size: large;">${hotArticle.title }</span><br />
-						<span id="distri"  style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">${hotArticle.content }</span></a>
+					<div class="col-lg-12" style="height:60px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;background-color: white;border-bottom: 1px solid #C5C5C5;">
+						<a href="showarticle?articleId=${hotArticle.articleId }">
+						<div style="margin-top: 3%;">
+							<span id="title" style="font-size: large;">${hotArticle.title }</span>
+						</div>
+						<span id="distri" style="font-size: small;max-width: 10em;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${hotArticle.content }</span></a>
 					</div>
 				</c:forEach>
 			</div>

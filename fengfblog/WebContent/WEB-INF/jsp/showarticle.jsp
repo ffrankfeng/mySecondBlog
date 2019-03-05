@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -20,7 +20,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>文字标题</title>
-
+<link rel="icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
 <!-- 引入Bootstrap核心样式文件 -->
 <link href="<%=basePath%>css/bootstrap.css" rel="stylesheet">
 <link href="<%=basePath%>css/customize.css" rel="stylesheet">	
@@ -28,6 +29,15 @@
 <script src="<%=basePath%>js/jquery-1.11.3.min.js"></script>
 <!-- 引入BootStrap核心js文件 -->
 <script src="<%=basePath%>js/bootstrap.min.js"></script>
+<style type="text/css">
+img{	
+background-size:contain|cover;
+
+max-width:100%;
+
+height: auto;
+} 
+</style>
 <script type="text/javascript">
 	function attention(authorId){
 		$.post(
@@ -97,7 +107,6 @@ function likeAndDislike(articleId,flag){
 	}
 
 function articlecomment(articleId,author,authorId){
-	alert();
 	var commentContent = $("#commentContent").val();
 	var at=commentContent.indexOf("@");
 	var flag=commentContent.substring(0,at+1);
@@ -291,7 +300,7 @@ function reply(fromUid,fromUsername){
 			<div class="row" style="min-height: 800px;">
 				
 				<div class="col-lg-8 col-xs-12"style="min-height: 800px;margin-top: 3%;background-color:white;">
-					<div class="col-lg-12 col-xs-12" style="">
+					<div class="col-lg-12 col-xs-12" style="margin-top: 3%;">
 						<span style="font-weight:bold;font-size:200%">
 							${article.title }
 						</span>
@@ -307,14 +316,12 @@ function reply(fromUid,fromUsername){
 						<span style="font-size: small;">${article.reading }</span>
 					</div>
 					<div class="col-lg-12 col-xs-12" style="border-bottom: 1px solid #C5C5C5;"></div>
-					<div class="col-lg-12 col-xs-12" style="margin-top: 4%; margin-bottom:6%">
-						<span >
-							${article.content }
-						</span>
+					<div class="col-lg-12 col-xs-12" style="argin-top: 4%; margin-top: 3%;margin-bottom:6%;overflow:auto;">
+						${article.content }
 					</div>
-					<div class="col-lg-4 col-xs-4"></div>
+					<div class="col-lg-4 col-xs-3"></div>
 					<c:if test="${articlelike == null}">
-						<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+						<div class="col-lg-3 col-xs-4" style="vertical-align: middle;">
 							<span id="thumbsup" style="font-size: large;"><a onclick="likeAndDislike(${article.articleId },true)"><img src="<%=basePath%>img/like3.png" style="width: 30px;height: 30px;" onclick="" /></a>
 							&emsp;${article.likecount }</span>
 						</div>
@@ -325,22 +332,22 @@ function reply(fromUid,fromUsername){
 					</c:if>
 					<c:if test="${articlelike != null}">
 						<c:if test="${articlelike.likeordislike == 'like'}">
-							<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+							<div class="col-lg-3 col-xs-4" style="vertical-align: middle;">
 								<span id="thumbsup" style="font-size: large;color: red"><img src="<%=basePath%>img/finishlike.png" style="width: 30px;height: 30px;" onclick="" />
 								&emsp;${article.likecount }</span>
 							</div>
-							<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
+							<div class="col-lg-3 col-xs-4" style=" vertical-align: middle;">
 								<span id="disthumbsup" style="font-size: large;"><img src="<%=basePath%>img/dislike.png" style="width: 30px;height: 30px;"/>
 								&emsp;${article.dislike }</span>
 							</div>
 						</c:if>
 						
 						<c:if test="${articlelike.likeordislike == 'dislike'}">
-							<div class="col-lg-3 col-xs-3" style="vertical-align: middle;">
+							<div class="col-lg-3 col-xs-4" style="vertical-align: middle;">
 								<span id="thumbsup" style="font-size: large;"><img src="<%=basePath%>img/like3.png" style="width: 30px;height: 30px;" onclick="" />
 								&emsp;${article.likecount }</span>
 							</div>
-							<div class="col-lg-3 col-xs-3" style=" vertical-align: middle;">
+							<div class="col-lg-3 col-xs-4" style=" vertical-align: middle;">
 								<span id="disthumbsup" style="font-size: large;color: #DDDDDD"><img src="<%=basePath%>img/finishdislike3.png" style="width: 30px;height: 30px;"/>
 								&emsp;${article.dislike }</span>
 							</div>

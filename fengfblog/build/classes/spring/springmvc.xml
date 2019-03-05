@@ -27,6 +27,9 @@
 			<bean class="com.fengf.blog.interceptor.LoginInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
+	
+  	<!-- 全局异常处理器 -->
+  	<bean id="globalExceptionResolver" class="com.fengf.blog.exception.GlobalExceptionResolver"/> 
   	
 	<!-- 配置视图解析器 -->
 

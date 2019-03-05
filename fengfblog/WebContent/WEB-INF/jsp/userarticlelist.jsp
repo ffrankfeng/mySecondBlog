@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -20,7 +20,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>首页</title>
-
+<link rel="icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
 <!-- 引入Bootstrap核心样式文件 -->
 <link href="<%=basePath%>css/bootstrap.css" rel="stylesheet">
 <link href="<%=basePath%>css/customize.css" rel="stylesheet">	

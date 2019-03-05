@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -21,7 +21,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
 <title>会员登录</title>
-
+<link rel="icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=basePath%>img/favicon.ico" type="image/x-icon">
 <!-- 引入Bootstrap核心样式文件 -->
 <link href="<%=basePath%>css/bootstrap.css" rel="stylesheet">
 <link href="<%=basePath%>css/customize.css" rel="stylesheet">	
@@ -62,7 +63,7 @@ $(function(){
 });	
 $(function(){
 	//为输入框绑定事件
-$("#verificationCode").blur(function(){
+$("#verificationCode").keyup(function(){
 		//1、失去焦点获得输入框的内容
 		var checkcodeInput=$("#verificationCode").val();
 		$.post(
@@ -90,11 +91,11 @@ function submitform(){
 		alert("用户不存在");
 		blog=false;
 	}
-	if(verificationCodeInput.indexOf("check")<0){
+	/* if(verificationCodeInput.indexOf("check")<0){
 		alert("验证码不正确");
 		blog=false;
 
-	}
+	} */
 	
 	/*  */
 	return blog;

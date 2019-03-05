@@ -66,10 +66,10 @@ public class MoodShareController {
 			String name = UUID.randomUUID().toString().replaceAll("-", "");
 			//jpg
 			String ext = FilenameUtils.getExtension(moodPic.getOriginalFilename());
-			String path =request.getServletContext().getRealPath("/") + "img\\mood\\";
+			String path ="d:\\fengfImg\\fengfblog\\mood\\";
 			File picfile = new File(path + name + "." + ext);
 			moodPic.transferTo(picfile);
-			moodshare.setMoodPic("img\\mood\\"+name + "." + ext);
+			moodshare.setMoodPic("d:\\fengfImg\\fengfblog\\mood\\"+name + "." + ext);
 		}
 		boolean flag = moodShareService.writeMyMood(moodshare);
 		response.setContentType("text/html; charset=UTF-8");

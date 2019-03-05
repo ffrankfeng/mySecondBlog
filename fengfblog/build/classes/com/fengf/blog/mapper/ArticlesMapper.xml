@@ -129,7 +129,7 @@
 				and keyword3 like "%"#{keyword3}"%"
 			</if>	
 		</where>
-		order by article_id
+		order by article_id DESC
 		limit #{startRow},#{size}
 	</select>
 		
